@@ -8,14 +8,6 @@
 using namespace std;
 
 TEST_CASE("Place/Transition") {
-    // Place mappings
-    array<unsigned, 0> p0_in_map{};
-    array<unsigned, 1> p1_in_map{0};
-    array<unsigned, 1> p2_in_map{1};
-
-    array<unsigned, 2> p0_out_map{0, 1};
-    array<unsigned, 0> p1_out_map{};
-    array<unsigned, 0> p2_out_map{};
 
     // Transition mappings
     array<unsigned, 1> t0_in_map{0};
@@ -24,10 +16,10 @@ TEST_CASE("Place/Transition") {
     array<unsigned, 1> t0_out_map{1};
     array<unsigned, 1> t1_out_map{2};
 
-    vector<GenericPlace*> places{
-        new Place<0, 2>(1, p0_in_map, p0_out_map),
-        new Place<1, 0>(0, p1_in_map, p1_out_map),
-        new Place<1, 0>(0, p2_in_map, p2_out_map)
+    vector<Place*> places{
+        new Place(1),
+        new Place(0),
+        new Place(0)
     };
 
     vector<GenericTransition*> transitions{
@@ -37,8 +29,6 @@ TEST_CASE("Place/Transition") {
 
     for (auto transition : transitions)
         transition->initialize(places);
-    for (auto place : places)
-        place->initialize(transitions);
 
     CHECK( places[0]->has_tokens() );
     CHECK_FALSE( places[1]->has_tokens() );
@@ -49,17 +39,17 @@ TEST_CASE("Place/Transition") {
     // Copy
     // There is 2 possible next states, if T0 fires or if T1 fires
     // I will also check what happens if both fire
-    vector<GenericPlace*> places_0{
+    vector<Place*> places_0{
         places[0]->copy(),
         places[1]->copy(),
         places[2]->copy()
     };
-    vector<GenericPlace*> places_1{
+    vector<Place*> places_1{
         places[0]->copy(),
         places[1]->copy(),
         places[2]->copy()
     };
-    vector<GenericPlace*> places_2{
+    vector<Place*> places_2{
         places[0]->copy(),
         places[1]->copy(),
         places[2]->copy()
@@ -80,18 +70,12 @@ TEST_CASE("Place/Transition") {
 
     for (auto transition : transitions_0)
         transition->initialize(places_0);
-    for (auto place : places_0)
-        place->initialize(transitions_0);
 
     for (auto transition : transitions_1)
         transition->initialize(places_1);
-    for (auto place : places_1)
-        place->initialize(transitions_1);
 
     for (auto transition : transitions_2)
         transition->initialize(places_2);
-    for (auto place : places_2)
-        place->initialize(transitions_2);
 
     // Fire T0
     transitions_0[0]->fire();

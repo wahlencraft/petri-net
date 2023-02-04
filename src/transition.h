@@ -6,13 +6,13 @@
 #include <vector>
 #include <sstream>
 
-class GenericPlace;
+#include "place.h"
 
 class GenericTransition {
 public:
     virtual ~GenericTransition() {}
     virtual GenericTransition* copy() const = 0;
-    virtual void initialize(std::vector<GenericPlace*> const &places) = 0;
+    virtual void initialize(std::vector<Place*> const &places) = 0;
     virtual std::string str() const = 0;
 
     /* If all preceding Places has tokens return true */
@@ -42,7 +42,7 @@ public:
         return new Transition<PREDECESSORS, SUCCESSORS> (predecessor_map, successor_map);
     }
 
-    void initialize(std::vector<GenericPlace*> const &places) override {
+    void initialize(std::vector<Place*> const &places) override {
         for (unsigned i = 0; i < PREDECESSORS; ++i)
             predecessors[i] = places[predecessor_map[i]];
         for (unsigned i = 0; i < SUCCESSORS; ++i)
@@ -68,8 +68,8 @@ public:
     }
 
 private:
-    std::array<GenericPlace*, PREDECESSORS> predecessors{nullptr};
-    std::array<GenericPlace*, SUCCESSORS> successors{nullptr};
+    std::array<Place*, PREDECESSORS> predecessors{nullptr};
+    std::array<Place*, SUCCESSORS> successors{nullptr};
     std::array<unsigned, PREDECESSORS> const predecessor_map;
     std::array<unsigned, SUCCESSORS> const successor_map;
     unsigned set_inputs{0};
