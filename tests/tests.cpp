@@ -4,6 +4,9 @@
 
 #include "place.h"
 #include "transition.h"
+#include "petri_net.h"
+
+#include <iostream>
 
 using namespace std;
 
@@ -121,4 +124,93 @@ TEST_CASE("Place/Transition") {
     for (auto transition : transitions_2)
         delete transition;
 
+}
+
+TEST_CASE("PetriNetParser") {
+    SECTION("Basics") {
+        PetriNetParser parser{};
+        vector<unsigned> in_mapping0 = parser.get_in_mapping("P0, P1 > T0 > P2");
+        vector<unsigned> in_mapping1 = parser.get_in_mapping("P0,P1>T0>P2");
+        vector<unsigned> in_mapping2 = parser.get_in_mapping("P0, P1 -> T0 -> P2");
+        CHECK( in_mapping0 == vector<unsigned>{0, 1} );
+        CHECK( in_mapping1 == vector<unsigned>{0, 1} );
+        CHECK( in_mapping1 == vector<unsigned>{0, 1} );
+        vector<unsigned> out_mapping0 = parser.get_out_mapping("P0, P1 > T0 > P2");
+        vector<unsigned> out_mapping1 = parser.get_out_mapping("P0,P1>T0>P2");
+        vector<unsigned> out_mapping2 = parser.get_out_mapping("P0, P1 -> T0 -> P2");
+        CHECK( out_mapping0 == vector<unsigned>{2} );
+        CHECK( out_mapping1 == vector<unsigned>{2} );
+        CHECK( out_mapping2 == vector<unsigned>{2} );
+    }
+
+    SECTION("Bad data") {
+        PetriNetParser parser{};
+        CHECK_THROWS( parser.get_in_mapping("P0,P1") );
+        CHECK_THROWS( parser.get_out_mapping("P0,P1") );
+        CHECK_THROWS( parser.get_out_mapping("P0,P1> T0") );
+    }
+
+    SECTION("Full graph") {
+        PetriNetParser parser{};
+
+        // Each PX will be given an internal index
+        // In this case they appear in numerical order, so
+        // PX will have index X
+
+        string arg0 = "P0     -> T0 -> P1";
+        string arg1 = "P1     -> T1 -> P0, P2";
+        string arg2 = "P2, P3 -> T2 -> P4";
+        string arg3 = "P4     -> T3 -> P3";
+
+        vector<unsigned> in_mapping0 = parser.get_in_mapping(arg0);
+        vector<unsigned> in_mapping1 = parser.get_in_mapping(arg1);
+        vector<unsigned> in_mapping2 = parser.get_in_mapping(arg2);
+        vector<unsigned> in_mapping3 = parser.get_in_mapping(arg3);
+        CHECK( in_mapping0 == vector<unsigned>{0} );
+        CHECK( in_mapping1 == vector<unsigned>{1} );
+        CHECK( in_mapping2 == vector<unsigned>{2, 3} );
+        CHECK( in_mapping3 == vector<unsigned>{4} );
+        vector<unsigned> out_mapping0 = parser.get_out_mapping(arg0);
+        vector<unsigned> out_mapping1 = parser.get_out_mapping(arg1);
+        vector<unsigned> out_mapping2 = parser.get_out_mapping(arg2);
+        vector<unsigned> out_mapping3 = parser.get_out_mapping(arg3);
+        CHECK( out_mapping0 == vector<unsigned>{1} );
+        CHECK( out_mapping1 == vector<unsigned>{0, 2} );
+        CHECK( out_mapping2 == vector<unsigned>{4} );
+        CHECK( out_mapping3 == vector<unsigned>{3} );
+    }
+}
+
+TEST_CASE("PetriNet") {
+    SECTION("Basics") {
+
+        // Net
+        //
+        //  /----\                    /--------|
+        // |      V                   V        |
+        // |    ( P0)               ( P3)      |
+        // |      |                   |        |
+        // |      V          /------->V        |
+        // |     ~~~ T0     |        ~~~ T2    |
+        // |      |         |         |        |
+        // |      V         |         |        |
+        // |    ( P1)       |         |        |
+        // |      |       ( P2)       V        |
+        // |      V         ^       ( P4)      |
+        // |     ~~~ T1     |         |        |
+        // |     | |        |         V        |
+        //  \---/   \------/         ~~~ T3    |
+        //                            |        |
+        //                             \------/
+        //
+
+        PetriNet net{
+            "P0     -> T0 -> P1",
+            "P1     -> T1 -> P0, P2",
+            "P2, P3 -> T2 -> P4",
+            "P4     -> T3 -> P3"
+        };
+
+        cout << net.str() << endl;
+    }
 }
