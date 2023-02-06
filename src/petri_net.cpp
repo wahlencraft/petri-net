@@ -1,4 +1,6 @@
 #include "petri_net.h"
+#include "place.h"
+#include "transition.h"
 
 #include <iostream>
 #include <sstream>
@@ -34,6 +36,10 @@ vector<unsigned> PetriNetParser::get_in_mapping(string const &arg) {
 
     in_mapping.shrink_to_fit();
     return in_mapping;
+}
+
+void PetriNetParser::register_transition(string const &arg) {
+    ++found_transitions;
 }
 
 vector<unsigned> PetriNetParser::get_out_mapping(string const &arg) {
@@ -94,12 +100,66 @@ unsigned PetriNetParser::get_transition_index(string const &name) {
 }
 
 PetriNet::PetriNet(std::initializer_list<string> lst) {
-
     PetriNetParser parser{};
     for (string arg : lst) {
         transition_in_mappings.push_back(parser.get_in_mapping(arg));
+        parser.register_transition(arg);
         transition_out_mappings.push_back(parser.get_out_mapping(arg));
     }
+    place_count = parser.get_found_places();
+    transition_count = parser.get_found_transitions();
+    cout << "transition_count=" << transition_count << endl;
+
+    places.resize(place_count);
+    transitions.resize(transition_count);
+
+    for (unsigned i = 0; i < place_count; ++i) {
+        places[i] = new Place(0);
+    }
+
+    for (unsigned i = 0; i < transition_count; ++i) {
+        vector<unsigned> const &transition_in_mapping = transition_in_mappings[i];
+        vector<unsigned> const &transition_out_mapping = transition_out_mappings[i];
+        transitions[i] = new Transition(transition_in_mapping, transition_out_mapping);
+    }
+
+    for (unsigned i = 0; i < transition_count; ++i) {
+        transitions[i]->initialize(places);
+    }
+}
+
+void PetriNet::set_state(vector<unsigned> state) {
+    assert(state.size() == place_count);
+    for (unsigned i = 0; i < place_count; ++i) {
+        places[i]->set_tokens(state[i]);
+    }
+}
+
+vector<unsigned> PetriNet::get_state() const {
+    vector<unsigned> state(place_count);
+    for (unsigned i=0; i<place_count; ++i)
+        state[i] = places[i]->get_tokens();
+    return state;
+}
+
+int PetriNet::fire(std::vector<bool> const &fire_vector) {
+
+    // Fire every Transition which is marked by fire_vector
+    for (unsigned i=0; i < transition_count; ++i) {
+        if (fire_vector[i]) {
+            transitions[i]->fire();
+        }
+    }
+
+    // Update every Place. If a Place reports an error return 1
+    for (unsigned i=0; i < place_count; ++i) {
+        if (places[i]->update()) {
+            return 1;
+        }
+    }
+
+    // No errors
+    return 0;
 }
 
 string PetriNet::str() const {

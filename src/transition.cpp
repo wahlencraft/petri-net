@@ -46,6 +46,7 @@ std::string Transition::str() const {
 }
 
 void Transition::fire() {
+    cout << str() << "::fire()" << endl;
     for (unsigned i = 0; i < predecessor_count; ++i)
         predecessors[i]->take_token();
     for (unsigned i = 0; i < successor_count; ++i)

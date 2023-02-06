@@ -16,7 +16,6 @@ TEST_CASE("Place/Transition") {
         // Transition mappings
         vector<unsigned> t0_in_map{0};
         vector<unsigned> t1_in_map{0};
-
         vector<unsigned> t0_out_map{1};
         vector<unsigned> t1_out_map{2};
 
@@ -214,5 +213,30 @@ TEST_CASE("PetriNet") {
         };
 
         cout << net.str() << endl;
+
+        vector<unsigned> state{1, 0, 0, 1, 0};
+        net.set_state(state);
+
+        vector<bool> const fire_vector0{1, 0, 0, 0};
+
+        CHECK(net.fire(fire_vector0) == 0);
+        CHECK(net.get_state() == vector<unsigned>{0, 1, 0, 1, 0});
+
+        vector<bool> const fire_vector1{0, 1, 0, 0};
+        CHECK(net.fire(fire_vector1) == 0);
+        CHECK(net.get_state() == vector<unsigned>{1, 0, 1, 1, 0});
+
+        vector<bool> const fire_vector2{0, 0, 1, 0};
+        CHECK(net.fire(fire_vector2) == 0);
+        CHECK(net.get_state() == vector<unsigned>{1, 0, 0, 0, 1});
+
+        vector<bool> const fire_vector3{1, 0, 0, 1};
+        CHECK(net.fire(fire_vector3) == 0);
+        CHECK(net.get_state() == vector<unsigned>{0, 1, 0, 1, 0});
+
+        // Illegal fire_vector
+        vector<bool> const fire_vector4{1, 0, 0, 0};
+        CHECK(net.fire(fire_vector4) == 1);
+
     }
 }

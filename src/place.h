@@ -14,6 +14,9 @@ public:
     int get_tokens() const;
     bool has_tokens() const;
 
+    /* Overwrite the number of tokens */
+    void set_tokens(unsigned tokens);
+
     /* If there is tokens, decrease with 1 and return 0. Otherwise return 1. */
     void take_token();
 

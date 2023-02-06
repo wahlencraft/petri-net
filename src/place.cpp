@@ -1,5 +1,9 @@
 #include "place.h"
 
+#include <iostream>
+
+using namespace std;
+
 Place::Place(unsigned initial_tokens): tokens{initial_tokens} {}
 
 Place* Place::copy() const {
@@ -8,6 +12,10 @@ Place* Place::copy() const {
 
 std::string Place::str() const {
     return "Place [" + std::to_string(get_tokens()) + "]";
+}
+
+void Place::set_tokens(unsigned count) {
+    tokens = count;
 }
 
 int Place::get_tokens() const {
@@ -20,11 +28,15 @@ bool Place::has_tokens() const {
 
 /* If there is tokens, decrease with 1 and return 0. Otherwise return 1. */
 void Place::take_token() {
+    cout << "take_token()" << endl;
+    cout << "output_tokens=" << output_tokens << endl;
     ++output_tokens;
+    cout << "take_token() done" << endl;
 }
 
 /* Increase the number of tokens with 1 */
 void Place::give_token() {
+    cout << "give_token()" << endl;
     ++input_tokens;
 }
 
