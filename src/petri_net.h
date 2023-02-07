@@ -41,6 +41,7 @@ class PetriNet {
 public:
     PetriNet(std::initializer_list<std::string> lst);
     PetriNet(PetriNet const &other);
+    ~PetriNet();
     PetriNet& operator=(PetriNet const &other);
 
     void set_state(std::vector<unsigned> state);

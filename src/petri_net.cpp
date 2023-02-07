@@ -152,6 +152,13 @@ PetriNet::PetriNet(PetriNet const &other) {
     }
 }
 
+PetriNet::~PetriNet() {
+    for (auto transition : transitions)
+        delete transition;
+    for (auto place : places)
+        delete place;
+}
+
 PetriNet& PetriNet::operator=(PetriNet const &other) {
     cout << "PetriNet operator=" << endl;
 
