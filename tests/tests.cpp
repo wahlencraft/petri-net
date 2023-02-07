@@ -5,6 +5,7 @@
 #include "place.h"
 #include "transition.h"
 #include "petri_net.h"
+#include "verifier.h"
 
 #include <iostream>
 
@@ -183,7 +184,60 @@ TEST_CASE("PetriNetParser") {
 }
 
 TEST_CASE("PetriNet") {
-    SECTION("Basics") {
+    SECTION("Small example") {
+        cout << "1" << endl;
+        //   ( P0)
+        //     |
+        //     V
+        //    ~~~ T0
+        //     |
+        //     V
+        //   ( P1)
+        //     |
+        //     V
+        //    ~~~ T1
+        //    /  \    *
+        //   V    V
+        // ( P2) ( P3)
+        PetriNet net{
+            "P0 -> T0 -> P1",
+            "P1 -> T1 -> P2, P3"
+        };
+        vector<unsigned> state{1, 0, 0, 0};
+        net.set_state(state);
+
+        cout << "2" << endl;
+        vector<bool> const fire_vector0{1, 0};
+        vector<bool> const fire_vector1{0, 1};
+        vector<bool> const fire_vector2{1, 1};
+
+        cout << "3" << endl;
+        PetriNet net0{net};
+        cout << "4" << endl;
+
+        CHECK( 0 == net0.fire(fire_vector0) );
+        cout << "5" << endl;
+        CHECK( net0.get_state() == vector<unsigned>{0, 1, 0, 0} );
+        cout << "6" << endl;
+
+
+        PetriNet net00 = net0;
+        PetriNet net01 = net0;
+        CHECK( 1 == net00.fire(fire_vector0) );
+        CHECK( 0 == net01.fire(fire_vector1) );
+        CHECK( net01.get_state() == vector<unsigned>{0, 0, 1, 1} );
+
+
+        PetriNet net010 = net01;
+        PetriNet net011 = net01;
+        PetriNet net012 = net01;
+        CHECK( 1 == net010.fire(fire_vector0) );
+        CHECK( 1 == net011.fire(fire_vector1) );
+        CHECK( 1 == net012.fire(fire_vector2) );
+
+    }
+
+    SECTION("Larger Example") {
 
         // Net
         //
@@ -239,4 +293,45 @@ TEST_CASE("PetriNet") {
         CHECK(net.fire(fire_vector4) == 1);
 
     }
+}
+
+TEST_CASE("Verifier") {
+    SECTION("Basics") {
+        Verifier verifier{};
+
+        //   ( P0)
+        //     |
+        //     V
+        //    ~~~ T0
+        //     |
+        //     V
+        //   ( P1)
+        //     |
+        //     V
+        //    ~~~ T1
+        //    /  \    *
+        //   V    V
+        // ( P2) ( P3)
+        PetriNet net{
+            "P0 -> T0 -> P1",
+            "P1 -> T1 -> P2, P3"
+        };
+        vector<unsigned> state{1, 0, 0, 0};
+        net.set_state(state);
+
+        verifier.verify(net);
+    }
+    //SECTION("Unlimited") {
+        //Verifier verifier{};
+        //PetriNet net{
+            //"P0     -> T0 -> P1",
+            //"P1     -> T1 -> P0, P2",
+            //"P2, P3 -> T2 -> P4",
+            //"P4     -> T3 -> P3"
+        //};
+        //vector<unsigned> state{1, 0, 0, 1, 0};
+        //net.set_state(state);
+
+        //verifier.verify(net);
+    //}
 }

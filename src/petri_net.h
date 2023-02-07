@@ -40,9 +40,14 @@ private:
 class PetriNet {
 public:
     PetriNet(std::initializer_list<std::string> lst);
+    PetriNet(PetriNet const &other);
+    PetriNet& operator=(PetriNet const &other);
+
     void set_state(std::vector<unsigned> state);
     std::vector<unsigned> get_state() const;
     int fire(std::vector<bool> const &fire_vector);
+    unsigned get_place_count() const;
+    unsigned get_transition_count() const;
 
     std::string str() const;
 
