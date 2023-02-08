@@ -324,7 +324,7 @@ TEST_CASE("Verifier") {
         Constraints constraints{};
         constraints.require_live = true;
         verifier.set_constraints(constraints);
-        CHECK_THROWS_AS(verifier.verify(net), VerificationException);
+        CHECK_THROWS_AS(verifier.verify(net), LivenessException);
     }
     //SECTION("Unlimited") {
         //Verifier verifier{};

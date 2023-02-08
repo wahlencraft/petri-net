@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "petri_net.h"
+#include "verification_exceptions.h"
 
 struct VectorHash {
     size_t operator()(std::vector<unsigned> const &v) const {
@@ -24,16 +25,6 @@ struct Constraints {
     bool require_live = false;
     std::unordered_set<std::vector<long unsigned>, VectorHash> reachable{};
     std::unordered_set<std::vector<long unsigned>, VectorHash> un_reachable{};
-};
-
-class VerificationException : public std::exception {
-public:
-    explicit VerificationException(std::string const &message): message{message} {}
-    const char *what() const noexcept override {
-        return message.c_str();
-    }
-private:
-    std::string message;
 };
 
 class Verifier {

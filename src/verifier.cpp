@@ -63,7 +63,7 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
     if (live_transitions == 0) {
         cout << "Deadlock" << endl;
         if (constraints.require_live) {
-            throw VerificationException{"PetriNet no longer live"};
+            throw LivenessException{"PetriNet no longer live"};
         }
     }
 }
