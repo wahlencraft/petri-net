@@ -33,11 +33,14 @@ public:
 
     void verify(PetriNet const &initial_net);
     void set_constraints(Constraints const &constraints);
+    std::vector<unsigned> const & get_max_bounds() const;
 private:
     void verify(PetriNet const &initial_net, unsigned current_depth);
+    void check_boundness(PetriNet const &net);
 
     struct Constraints constraints;
     std::unordered_set<std::vector<unsigned>, VectorHash> previous_states{};
+    std::vector<unsigned> token_max{};
 };
 
 #endif  // VERIFIER_H_

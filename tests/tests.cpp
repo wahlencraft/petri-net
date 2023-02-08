@@ -365,17 +365,76 @@ TEST_CASE("Verifier") {
         CHECK_NOTHROW(verifier.verify(live_net));
 
     }
-    //SECTION("Unlimited") {
-        //Verifier verifier{};
-        //PetriNet net{
-            //"P0     -> T0 -> P1",
-            //"P1     -> T1 -> P0, P2",
-            //"P2, P3 -> T2 -> P4",
-            //"P4     -> T3 -> P3"
-        //};
-        //vector<unsigned> state{1, 0, 0, 1, 0};
-        //net.set_state(state);
+    SECTION("Boundedness") {
+        Constraints constraints{};
+        constraints.require_live = true;
+        constraints.max_tokens = { 1, 1, 5, 1, 1 };
 
-        //verifier.verify(net);
-    //}
+        Verifier verifier{};
+        verifier.set_constraints(constraints);
+
+        // Unbound Net
+        //
+        //  /----\                    /--------|
+        // |      V                   V        |
+        // |    ( P0)               ( P3)      |
+        // |      |                   |        |
+        // |      V          /------->V        |
+        // |     ~~~ T0     |        ~~~ T2    |
+        // |      |         |         |        |
+        // |      V         |         |        |
+        // |    ( P1)       |         |        |
+        // |      |       ( P2)       V        |
+        // |      V         ^       ( P4)      |
+        // |     ~~~ T1     |         |        |
+        // |     | |        |         V        |
+        //  \---/   \------/         ~~~ T3    |
+        //                            |        |
+        //                             \------/
+        //
+        PetriNet unbound_net{
+            "P0     -> T0 -> P1",
+            "P1     -> T1 -> P0, P2",
+            "P2, P3 -> T2 -> P4",
+            "P4     -> T3 -> P3"
+        };
+        vector<unsigned> state1{1, 0, 0, 1, 0};
+        unbound_net.set_state(state1);
+
+        CHECK_THROWS_AS(verifier.verify(unbound_net), BoundednessException);
+
+        // Bound Net
+        //
+        //  /----\                    /--------|
+        // |      V                   V        |
+        // |    ( P0)               ( P4)      |
+        // |      |                   |        |
+        // |      V          /------->V        |
+        // |     ~~~ T0     |        ~~~ T2    |
+        // |      |       ( P2)      /|        |
+        // |      V         ^       / |        |
+        // |    ( P1)       |      /  |        |
+        // |      |         |     /   V        |
+        // |      V         |    V  ( P5)      |
+        // |     ~~~ T1     | ( P3)   |        |
+        // |     |^|        |   |     V        |
+        //  \---/ | \------/    |    ~~~ T3    |
+        //        |             |     |        |
+        //        ---------------      \------/
+        //
+        PetriNet bound_net{
+            "P0     -> T0 -> P1",
+            "P1, P3 -> T1 -> P0, P2",
+            "P2, P4 -> T2 -> P3, P5",
+            "P5     -> T3 -> P4"
+        };
+        vector<unsigned> state2{1, 0, 0, 5, 1, 0};
+        bound_net.set_state(state2);
+
+        constraints.max_tokens = { 1, 1, 5, 5, 1, 1 };
+        verifier.set_constraints(constraints);
+
+        CHECK_NOTHROW(verifier.verify(bound_net));
+        CHECK(verifier.get_max_bounds() == std::vector<unsigned>{1, 1, 5, 5, 1, 1});
+    }
 }
