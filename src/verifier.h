@@ -18,18 +18,35 @@ struct VectorHash {
     }
 };
 
+struct Constraints {
+    std::vector<long unsigned> max_tokens{};
+    long unsigned max_depth = 10000;
+    bool require_live = false;
+    std::unordered_set<std::vector<long unsigned>, VectorHash> reachable{};
+    std::unordered_set<std::vector<long unsigned>, VectorHash> un_reachable{};
+};
+
+class VerificationException : public std::exception {
+public:
+    explicit VerificationException(std::string const &message): message{message} {}
+    const char *what() const noexcept override {
+        return message.c_str();
+    }
+private:
+    std::string message;
+};
+
 class Verifier {
 public:
     Verifier();
 
     void verify(PetriNet const &initial_net);
+    void set_constraints(Constraints const &constraints);
 private:
     void verify(PetriNet const &initial_net, unsigned current_depth);
 
+    struct Constraints constraints;
     std::unordered_set<std::vector<unsigned>, VectorHash> previous_states{};
-    std::unordered_set<std::vector<unsigned>, VectorHash> illigal_states{};
-    std::unordered_map<std::vector<unsigned>, unsigned, VectorHash> target_states{};
-    unsigned const max_depth;
 };
 
 #endif  // VERIFIER_H_

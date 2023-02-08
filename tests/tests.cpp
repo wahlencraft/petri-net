@@ -320,6 +320,11 @@ TEST_CASE("Verifier") {
         net.set_state(state);
 
         verifier.verify(net);
+
+        Constraints constraints{};
+        constraints.require_live = true;
+        verifier.set_constraints(constraints);
+        CHECK_THROWS_AS(verifier.verify(net), VerificationException);
     }
     //SECTION("Unlimited") {
         //Verifier verifier{};
