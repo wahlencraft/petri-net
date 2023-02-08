@@ -25,6 +25,8 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
         throw runtime_error{string("Verifier reached max depth (") + to_string(constraints.max_depth) + string(")")};
     }
 
+    previous_states.insert(petri_net.get_state());
+
     unsigned const transition_count = petri_net.get_transition_count();
     vector<bool> fire_vector(transition_count, false);
     fire_vector[0] = true;
@@ -44,8 +46,9 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
             vector<unsigned> const &state = active_net.get_state();
             if (previous_states.count(state) == 0) {
                 // This is a new state
-                previous_states.insert(state);
                 verify(active_net, current_depth + 1);
+            } else {
+                cout << "Known state" << endl;
             }
         }
 

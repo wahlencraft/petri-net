@@ -321,10 +321,49 @@ TEST_CASE("Verifier") {
 
         verifier.verify(net);
 
+    }
+
+    SECTION("Liveness") {
         Constraints constraints{};
         constraints.require_live = true;
+
+        Verifier verifier{};
         verifier.set_constraints(constraints);
-        CHECK_THROWS_AS(verifier.verify(net), LivenessException);
+
+        // Net which dies
+        PetriNet net_with_deadlock{  // Same net as above
+            "P0 -> T0 -> P1",
+            "P1 -> T1 -> P2, P3"
+        };
+        vector<unsigned> state1{1, 0, 0, 0};
+        net_with_deadlock.set_state(state1);
+        CHECK_THROWS_AS(verifier.verify(net_with_deadlock), LivenessException);
+
+        // Live net
+        //
+        //   ---------
+        //   |        |
+        //   V        |
+        // ( P0)      |
+        //   |        |
+        //   V        |
+        //  ~~~ T0    |
+        //   |        |
+        //   V        |
+        // ( P1)      |
+        //   |        |
+        //   V        |
+        //  ~~~ T1    |
+        //   |        |
+        //   ----------
+        PetriNet live_net{
+            "P0 -> T0 -> P1",
+            "P1 -> T1 -> P0"
+        };
+        vector<unsigned> state2{1, 0};
+        live_net.set_state(state2);
+        CHECK_NOTHROW(verifier.verify(live_net));
+
     }
     //SECTION("Unlimited") {
         //Verifier verifier{};
