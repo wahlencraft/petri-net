@@ -26,9 +26,11 @@ Transition* Transition::copy() const {
 }
 
 void Transition::initialize(std::vector<Place*> const &places) {
+    predecessors.resize(predecessor_count);
     for (unsigned i = 0; i < predecessor_count; ++i) {
         predecessors[i] = places[predecessor_map[i]];
     }
+    successors.resize(successor_count);
     for (unsigned i = 0; i < successor_count; ++i) {
         successors[i] = places[successor_map[i]];
     }

@@ -19,8 +19,6 @@ void Verifier::verify(PetriNet const &initial_net) {
 }
 
 void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
-    cout << "\nVerify: depth=" << current_depth << endl;
-    cout << "petri_net=" << petri_net.str() << endl;
 
     if (current_depth > constraints.max_depth) {
         throw runtime_error{string("Verifier reached max depth (") + to_string(constraints.max_depth) + string(")")};
@@ -36,23 +34,18 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
     fire_vector[0] = true;
     unsigned live_transitions = 0;
     while (fire_vector != vector<bool>(transition_count, false)) {
-        cout << "fire_vector=";
-        for (bool e : fire_vector)
-            cout << e;
-        cout << endl;
         PetriNet active_net{petri_net};
         if (active_net.fire(fire_vector)) {
-            cout << "Illigal" << endl;
+            // Illegal fire
         } else {
             ++live_transitions;
-            cout << "Legal" << endl;
             // Legal fire, active_net is now in a new state
             vector<unsigned> const &state = active_net.get_state();
             if (previous_states.count(state) == 0) {
                 // This is a new state
                 verify(active_net, current_depth + 1);
             } else {
-                cout << "Known state" << endl;
+                // Known state
             }
         }
 
@@ -68,7 +61,6 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
     }
 
     if (live_transitions == 0) {
-        cout << "Deadlock" << endl;
         if (constraints.require_live) {
             throw LivenessException{"PetriNet no longer live"};
         }

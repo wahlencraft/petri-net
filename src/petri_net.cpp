@@ -123,12 +123,11 @@ PetriNet::PetriNet(std::initializer_list<string> lst) {
     }
 
     for (unsigned i = 0; i < transition_count; ++i) {
-        transitions[i]->initialize(places);
+        transitions.at(i)->initialize(places);
     }
 }
 
 PetriNet::PetriNet(PetriNet const &other) {
-    cout << "PetriNet copy constructor" << endl;
 
     place_count = other.place_count;
     transition_count = other.transition_count;
@@ -160,7 +159,6 @@ PetriNet::~PetriNet() {
 }
 
 PetriNet& PetriNet::operator=(PetriNet const &other) {
-    cout << "PetriNet operator=" << endl;
 
     PetriNet tmp{other};
 

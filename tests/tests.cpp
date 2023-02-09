@@ -185,7 +185,6 @@ TEST_CASE("PetriNetParser") {
 
 TEST_CASE("PetriNet") {
     SECTION("Small example") {
-        cout << "1" << endl;
         //   ( P0)
         //     |
         //     V
@@ -206,27 +205,20 @@ TEST_CASE("PetriNet") {
         vector<unsigned> state{1, 0, 0, 0};
         net.set_state(state);
 
-        cout << "2" << endl;
         vector<bool> const fire_vector0{1, 0};
         vector<bool> const fire_vector1{0, 1};
         vector<bool> const fire_vector2{1, 1};
 
-        cout << "3" << endl;
         PetriNet net0{net};
-        cout << "4" << endl;
 
         CHECK( 0 == net0.fire(fire_vector0) );
-        cout << "5" << endl;
         CHECK( net0.get_state() == vector<unsigned>{0, 1, 0, 0} );
-        cout << "6" << endl;
-
 
         PetriNet net00 = net0;
         PetriNet net01 = net0;
         CHECK( 1 == net00.fire(fire_vector0) );
         CHECK( 0 == net01.fire(fire_vector1) );
         CHECK( net01.get_state() == vector<unsigned>{0, 0, 1, 1} );
-
 
         PetriNet net010 = net01;
         PetriNet net011 = net01;
@@ -265,8 +257,6 @@ TEST_CASE("PetriNet") {
             "P2, P3 -> T2 -> P4",
             "P4     -> T3 -> P3"
         };
-
-        cout << net.str() << endl;
 
         vector<unsigned> state{1, 0, 0, 1, 0};
         net.set_state(state);
@@ -490,4 +480,78 @@ TEST_CASE("Verifier") {
         verifier.set_constraints(constraints);
         CHECK_THROWS_AS(verifier.verify(bound_net), ReachabilityException);
     }
+
+    BENCHMARK_ADVANCED("No extra checks")(Catch::Benchmark::Chronometer meter) {
+        Constraints constraints{};
+
+        Verifier verifier{};
+        verifier.set_constraints(constraints);
+
+        PetriNet bound_net{
+            "P0     -> T0 -> P1",
+            "P1, P3 -> T1 -> P0, P2",
+            "P2, P4 -> T2 -> P3, P5",
+            "P5     -> T3 -> P4"
+        };
+        vector<unsigned> initial_state{1, 0, 0, 5, 1, 0};
+        bound_net.set_state(initial_state);
+        meter.measure([&verifier, &bound_net] { verifier.verify(bound_net); });
+    };
+
+    BENCHMARK_ADVANCED("Liveness check")(Catch::Benchmark::Chronometer meter) {
+        Constraints constraints{};
+        constraints.require_live = true;
+
+        Verifier verifier{};
+        verifier.set_constraints(constraints);
+
+        PetriNet bound_net{
+            "P0     -> T0 -> P1",
+            "P1, P3 -> T1 -> P0, P2",
+            "P2, P4 -> T2 -> P3, P5",
+            "P5     -> T3 -> P4"
+        };
+        vector<unsigned> initial_state{1, 0, 0, 5, 1, 0};
+        bound_net.set_state(initial_state);
+        meter.measure([&verifier, &bound_net] { verifier.verify(bound_net); });
+    };
+
+    BENCHMARK_ADVANCED("With boundedness")(Catch::Benchmark::Chronometer meter) {
+        Constraints constraints{};
+        constraints.max_tokens = { 1, 1, 5, 5, 1, 1 };
+
+        Verifier verifier{};
+        verifier.set_constraints(constraints);
+
+        PetriNet bound_net{
+            "P0     -> T0 -> P1",
+            "P1, P3 -> T1 -> P0, P2",
+            "P2, P4 -> T2 -> P3, P5",
+            "P5     -> T3 -> P4"
+        };
+        vector<unsigned> initial_state{1, 0, 0, 5, 1, 0};
+        bound_net.set_state(initial_state);
+        meter.measure([&verifier, &bound_net] { verifier.verify(bound_net); });
+    };
+
+    BENCHMARK_ADVANCED("With reachability checks")(Catch::Benchmark::Chronometer meter) {
+        Constraints constraints{};
+        constraints.illegal_states.insert(vector<unsigned>{1, 1, 5, 0, 0, 1});
+        constraints.illegal_states.insert(vector<unsigned>{1, 0, 5, 0, 1, 1});
+        constraints.illegal_states.insert(vector<unsigned>{1, 0, 3, 3, 0, 1});
+        constraints.illegal_states.insert(vector<unsigned>{1, 0, 5, 1, 0, 1});
+
+        Verifier verifier{};
+        verifier.set_constraints(constraints);
+
+        PetriNet bound_net{
+            "P0     -> T0 -> P1",
+            "P1, P3 -> T1 -> P0, P2",
+            "P2, P4 -> T2 -> P3, P5",
+            "P5     -> T3 -> P4"
+        };
+        vector<unsigned> initial_state{1, 0, 0, 5, 1, 0};
+        bound_net.set_state(initial_state);
+        meter.measure([&verifier, &bound_net] { verifier.verify(bound_net); });
+    };
 }
