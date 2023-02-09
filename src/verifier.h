@@ -20,11 +20,10 @@ struct VectorHash {
 };
 
 struct Constraints {
-    std::vector<long unsigned> max_tokens{};
+    std::vector<unsigned> max_tokens{};
     long unsigned max_depth = 10000;
     bool require_live = false;
-    std::unordered_set<std::vector<long unsigned>, VectorHash> reachable{};
-    std::unordered_set<std::vector<long unsigned>, VectorHash> un_reachable{};
+    std::unordered_set<std::vector<unsigned>, VectorHash> illegal_states{};
 };
 
 class Verifier {
@@ -34,9 +33,11 @@ public:
     void verify(PetriNet const &initial_net);
     void set_constraints(Constraints const &constraints);
     std::vector<unsigned> const & get_max_bounds() const;
+    bool reached_state(std::vector<unsigned> const &state) const;
 private:
     void verify(PetriNet const &initial_net, unsigned current_depth);
     void check_boundness(PetriNet const &net);
+    void check_reachability(PetriNet const &net);
 
     struct Constraints constraints;
     std::unordered_set<std::vector<unsigned>, VectorHash> previous_states{};

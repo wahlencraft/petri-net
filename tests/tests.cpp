@@ -437,4 +437,57 @@ TEST_CASE("Verifier") {
         CHECK_NOTHROW(verifier.verify(bound_net));
         CHECK(verifier.get_max_bounds() == std::vector<unsigned>{1, 1, 5, 5, 1, 1});
     }
+    SECTION("Reachability") {
+        Constraints constraints{};
+        constraints.require_live = true;
+
+        Verifier verifier{};
+        verifier.set_constraints(constraints);
+
+        // Bound Net
+        //
+        //  /----\                    /--------|
+        // |      V                   V        |
+        // |    ( P0)               ( P4)      |
+        // |      |                   |        |
+        // |      V          /------->V        |
+        // |     ~~~ T0     |        ~~~ T2    |
+        // |      |       ( P2)      /|        |
+        // |      V         ^       / |        |
+        // |    ( P1)       |      /  |        |
+        // |      |         |     /   V        |
+        // |      V         |    V  ( P5)      |
+        // |     ~~~ T1     | ( P3)   |        |
+        // |     |^|        |   |     V        |
+        //  \---/ | \------/    |    ~~~ T3    |
+        //        |             |     |        |
+        //        ---------------      \------/
+        //
+        PetriNet bound_net{
+            "P0     -> T0 -> P1",
+            "P1, P3 -> T1 -> P0, P2",
+            "P2, P4 -> T2 -> P3, P5",
+            "P5     -> T3 -> P4"
+        };
+        vector<unsigned> state1{1, 0, 0, 5, 1, 0};
+        bound_net.set_state(state1);
+
+        // Check constraints afterwards
+        verifier.verify(bound_net);
+        CHECK( verifier.reached_state(vector<unsigned>{1, 0, 5, 0, 1, 0}) );
+        CHECK( verifier.reached_state(vector<unsigned>{0, 1, 5, 0, 1, 0}) );
+        CHECK( verifier.reached_state(vector<unsigned>{0, 1, 2, 3, 1, 0}) );
+        CHECK( !verifier.reached_state(vector<unsigned>{1, 1, 2, 3, 1, 0}) );
+
+        // Throw error if illegal state reached
+        vector<unsigned> const illegal_state0{0, 0, 5, 0, 1, 0};
+        constraints.illegal_states.insert(illegal_state0);
+        verifier.set_constraints(constraints);
+        CHECK_NOTHROW(verifier.verify(bound_net));
+
+        vector<unsigned> const illegal_state1{1, 0, 2, 3, 1, 0};
+        constraints.illegal_states.insert(illegal_state1);
+        verifier.set_constraints(constraints);
+        CHECK_THROWS_AS(verifier.verify(bound_net), ReachabilityException);
+    }
 }

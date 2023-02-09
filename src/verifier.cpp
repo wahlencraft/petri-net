@@ -27,6 +27,7 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
     }
 
     check_boundness(petri_net);
+    check_reachability(petri_net);
 
     previous_states.insert(petri_net.get_state());
 
@@ -94,7 +95,20 @@ void Verifier::check_boundness(PetriNet const &net) {
     }
 }
 
+void Verifier::check_reachability(PetriNet const &net) {
+    if (constraints.illegal_states.count(net.get_state())) {
+        stringstream ss;
+        for (auto token : net.get_state())
+            ss << token << " ";
+        throw ReachabilityException{"Illegal state (" + ss.str() + ") reached"};
+    }
+}
+
 std::vector<unsigned> const & Verifier::get_max_bounds() const {
     return token_max;
+}
+
+bool Verifier::reached_state(vector<unsigned> const &state) const {
+    return previous_states.count(state);
 }
 
