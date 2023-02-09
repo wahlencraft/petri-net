@@ -10,6 +10,8 @@
 using namespace std;
 
 Transition::Transition(std::vector<unsigned> const &p_map, std::vector<unsigned> const &s_map):
+    predecessors{p_map.size(), nullptr},
+    successors{s_map.size(), nullptr},
     predecessor_map{p_map}, successor_map{s_map},
     predecessor_count{p_map.size()}, successor_count{s_map.size()} {}
 
@@ -26,11 +28,9 @@ Transition* Transition::copy() const {
 }
 
 void Transition::initialize(std::vector<Place*> const &places) {
-    predecessors.resize(predecessor_count);
     for (unsigned i = 0; i < predecessor_count; ++i) {
         predecessors[i] = places[predecessor_map[i]];
     }
-    successors.resize(successor_count);
     for (unsigned i = 0; i < successor_count; ++i) {
         successors[i] = places[successor_map[i]];
     }

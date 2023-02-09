@@ -23,8 +23,8 @@ public:
     void fire();
 
 private:
-    std::vector<Place*> predecessors{nullptr};
-    std::vector<Place*> successors{nullptr};
+    std::vector<Place*> predecessors;
+    std::vector<Place*> successors;
     std::vector<unsigned> const &predecessor_map;
     std::vector<unsigned> const &successor_map;
     size_t const predecessor_count;
