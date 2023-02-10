@@ -34,6 +34,7 @@ public:
     void set_constraints(Constraints const &constraints);
     std::vector<unsigned> const & get_max_bounds() const;
     bool reached_state(std::vector<unsigned> const &state) const;
+    size_t get_state_count() const;
 private:
     void verify(PetriNet const &initial_net, unsigned current_depth);
     void check_boundness(PetriNet const &net);

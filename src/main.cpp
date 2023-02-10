@@ -28,6 +28,7 @@ int main() {
     vector<unsigned> initial_state{1, 0, 0, 5, 1, 0};
     bound_net.set_state(initial_state);
     verifier.verify(bound_net);
+    cout << "State count: " << verifier.get_state_count() << endl;
 
     return 0;
 }

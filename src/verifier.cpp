@@ -104,3 +104,7 @@ bool Verifier::reached_state(vector<unsigned> const &state) const {
     return previous_states.count(state);
 }
 
+size_t Verifier::get_state_count() const {
+    return previous_states.size();
+}
+
