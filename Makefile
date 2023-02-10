@@ -30,7 +30,7 @@ DEBUG_FLAGS := -Og
 OPTIM_FLAGS := -O3
 WARNING_FLAGS := -Wno-deprecated-declarations -Wall -Wextra -pedantic \
 	-Weffc++ -Wold-style-cast -Woverloaded-virtual
-CPPFLAGS := -std=c++17 -fmax-errors=3 -MMD $(INC) $(OPTIM_FLAGS) $(WARNING_FLAGS)
+CPPFLAGS := -std=c++17 -fmax-errors=3 -MMD $(INC) $(OPTIM_FLAGS) $(WARNING_FLAGS) $(DEBUG_FLAGS)
 
 CFLAGS := -Wall -Wextra -pedantic
 CFLAGS += $(INC)
