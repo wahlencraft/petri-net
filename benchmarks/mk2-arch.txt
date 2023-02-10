@@ -1,0 +1,39 @@
+dabc617 (with debugging symbols)
+-------------------------------------------------------------------------------
+No extra checks                                100             1    23.7178 ms
+                                         239.17 us    236.631 us    241.477 us
+                                         12.331 us     11.145 us    13.4107 us
+
+Liveness check                                 100             1    23.9338 ms
+                                         237.26 us     234.75 us    239.747 us
+                                        12.7321 us    11.8058 us    14.3545 us
+
+With boundedness                               100             1     25.213 ms
+                                        250.526 us    248.599 us     252.41 us
+                                        9.71144 us    8.98214 us    10.6555 us
+
+With reachability checks                       100             1    23.8626 ms
+                                        243.677 us    242.344 us    244.931 us
+                                       6.55788 us    5.08268 us    9.03154 us
+
+total heap usage: 12,880 allocs, 12,880 frees, 390,064 bytes allocated
+
+3f751e9
+-------------------------------------------------------------------------------
+No extra checks                                100             1    20.1799 ms
+                                        208.506 us    207.076 us    209.755 us
+                                        6.82295 us    5.80545 us    8.01096 us
+
+Liveness check                                 100             1    20.2007 ms
+                                        205.051 us    203.211 us    206.927 us
+                                        9.45961 us    8.58603 us    11.0513 us
+
+With boundedness                               100             1    21.4794 ms
+                                        218.663 us    217.088 us    220.093 us
+                                        7.62673 us    6.68807 us     8.7563 us
+
+With reachability checks                       100             1    20.5261 ms
+                                        205.372 us    203.792 us    207.151 us
+                                        8.55794 us    7.16803 us    12.2695 us
+
+total heap usage: 11,436 allocs, 11,436 frees, 378,512 bytes allocated
