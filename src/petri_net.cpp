@@ -7,7 +7,9 @@
 
 using namespace std;
 
-PetriNet::PetriNet(std::initializer_list<string> lst) {
+PetriNet::PetriNet(std::initializer_list<string> lst):
+    transition_in_mappings{}, transition_out_mappings{},
+    places{}, transitions{}, place_count{}, transition_count{} {
     PetriNetParser parser{};
     for (string arg : lst) {
         transition_in_mappings.push_back(parser.get_in_mapping(arg));
@@ -35,15 +37,13 @@ PetriNet::PetriNet(std::initializer_list<string> lst) {
     }
 }
 
-PetriNet::PetriNet(PetriNet const &other) {
-
-    place_count = other.place_count;
-    transition_count = other.transition_count;
-    places.resize(place_count);
-    transitions.resize(transition_count);
-
-    transition_in_mappings = other.transition_in_mappings;
-    transition_out_mappings = other.transition_out_mappings;
+PetriNet::PetriNet(PetriNet const &other):
+    transition_in_mappings{other.transition_in_mappings},
+    transition_out_mappings{other.transition_out_mappings},
+    places(other.place_count, nullptr),
+    transitions(other.transition_count, nullptr),
+    place_count{other.place_count},
+    transition_count{other.transition_count} {
 
     for (unsigned i = 0; i < place_count; ++i) {
         places[i] = new Place(other.places[i]->get_tokens());

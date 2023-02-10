@@ -27,12 +27,12 @@ public:
     std::string str() const;
 
 private:
-    std::vector<std::vector<unsigned>> transition_in_mappings{};
-    std::vector<std::vector<unsigned>> transition_out_mappings{};
-    std::vector<Place *> places{};
-    std::vector<Transition *> transitions{};
-    unsigned place_count{};
-    unsigned transition_count{};
+    std::vector<std::vector<unsigned>> transition_in_mappings;
+    std::vector<std::vector<unsigned>> transition_out_mappings;
+    std::vector<Place *> places;
+    std::vector<Transition *> transitions;
+    unsigned place_count;
+    unsigned transition_count;
 };
 
 #endif  // PETRI_NET_H_
