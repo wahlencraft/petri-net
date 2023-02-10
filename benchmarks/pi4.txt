@@ -1,0 +1,56 @@
+These benchmarks were recorded on a Raspberry Pi 4
+
+dabc617 (with debug symbols)
+-------------------------------------------------------------------------------
+No extra checks                                100             1    144.798 ms
+                                        1.46036 ms    1.45923 ms    1.46192 ms
+                                        6.70398 us    5.17729 us     10.746 us
+
+jLiveness check                                 100             1    145.616 ms
+                                         1.4713 ms    1.46997 ms    1.47292 ms
+                                        7.44345 us    6.18079 us    10.6228 us
+
+With boundedness                               100             1    160.892 ms
+                                        1.58326 ms    1.58214 ms    1.58515 ms
+                                        7.25832 us    4.96511 us    12.9929 us
+
+With reachability checks                       100             1     146.63 ms
+                                        1.46377 ms    1.46271 ms    1.46532 ms
+                                        6.49056 us    4.95459 us    9.97692 us
+
+dbc3d45
+-------------------------------------------------------------------------------
+No extra checks                                100             1    122.301 ms
+                                        1.22725 ms    1.22653 ms    1.22908 ms
+                                        5.47051 us    2.78341 us    11.3476 us
+
+Liveness check                                 100             1    122.522 ms
+                                        1.22753 ms    1.22663 ms    1.22914 ms
+                                        5.95251 us    3.99173 us    10.7069 us
+
+With boundedness                               100             1    134.029 ms
+                                        1.34018 ms    1.33917 ms    1.34202 ms
+                                        6.73837 us    3.90534 us    10.8779 us
+
+With reachability checks                       100             1    122.795 ms
+                                        1.23142 ms    1.23018 ms    1.23414 ms
+                                        8.89536 us     4.9778 us    16.0283 us
+
+de93f24
+-------------------------------------------------------------------------------
+No extra checks                                100             1    117.057 ms
+                                        1.17507 ms    1.17425 ms    1.17697 ms
+                                        6.01759 us     3.3247 us    12.1026 us
+
+Liveness check                                 100             1     117.75 ms
+                                        1.18548 ms    1.18472 ms     1.1875 ms
+                                        5.88542 us    2.76601 us    12.4566 us
+
+With boundedness                               100             1    130.446 ms
+                                        1.30547 ms     1.3047 ms    1.30734 ms
+                                        5.70617 us    2.91153 us     11.755 us
+
+With reachability checks                       100             1    118.425 ms
+                                        1.17876 ms    1.17804 ms    1.18036 ms
+                                        5.18339 us    2.95462 us    10.2427 us
+

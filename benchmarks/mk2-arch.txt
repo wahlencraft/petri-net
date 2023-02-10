@@ -1,3 +1,6 @@
+These benchmarks was recorded on a i5-13600K with the fastest core overclocked
+to 5.5 GHz and 3600 MT/s CL 17 memory.
+
 dabc617 (with debugging symbols)
 -------------------------------------------------------------------------------
 No extra checks                                100             1    23.7178 ms
