@@ -60,3 +60,44 @@ With reachability checks                       100             1    19.9385 ms
                                         8.08917 us    7.04812 us    9.20616 us
 
 total heap usage: 11,436 allocs, 11,436 frees, 378,512 bytes allocated
+
+db0d109
+-------------------------------------------------------------------------------
+No extra checks                                100             1    25.5436 ms
+                                        256.363 us    255.935 us    257.876 us
+                                        3.68734 us    1.07797 us    8.46174 us
+
+Liveness check                                 100             1    25.5467 ms
+                                        259.816 us    258.681 us    261.293 us
+                                        6.55104 us    5.39736 us    9.13305 us
+
+With boundedness                               100             1    26.8331 ms
+                                        268.637 us    268.222 us    269.688 us
+                                        3.15451 us    1.58924 us     6.6014 us
+
+With reachability checks                       100             1    25.6086 ms
+                                        260.658 us    259.531 us    261.967 us
+                                        6.20472 us    5.44966 us    6.96714 us
+
+total heap usage: 16,116 allocs, 16,116 frees, 603,152 bytes allocated
+
+3b9fc18
+-------------------------------------------------------------------------------
+No extra checks                                100             1    18.7449 ms
+                                        190.576 us    189.607 us    191.792 us
+                                        5.53415 us    4.58245 us    7.75826 us
+
+Liveness check                                 100             1    18.9472 ms
+                                        189.585 us    188.643 us    190.727 us
+                                        5.29171 us    4.50132 us    6.40953 us
+
+With boundedness                               100             1    19.8969 ms
+                                        199.793 us    199.208 us    201.707 us
+                                        4.85064 us    1.77549 us    10.7911 us
+
+With reachability checks                       100             1    18.7682 ms
+                                        189.302 us    188.722 us    189.965 us
+                                        3.16038 us    2.68718 us    4.20028 us
+
+total heap usage: 11,438 allocs, 11,438 frees, 378,720 bytes allocated
+
