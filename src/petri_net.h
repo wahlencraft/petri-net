@@ -11,6 +11,7 @@
 #include "place.h"
 #include "transition.h"
 #include "petri_net_parser.h"
+#include "petri_net_state.h"
 
 class PetriNet {
 public:
@@ -19,14 +20,15 @@ public:
     ~PetriNet();
     PetriNet& operator=(PetriNet const &other);
 
-    void set_state(std::vector<unsigned> state);
+    void set_state(PetriNetState const &state);
     void update_state(unsigned index, unsigned tokens);
     void update_state(std::string const &name, unsigned tokens);
 
-    std::vector<unsigned> get_state() const;
+    PetriNetState get_state() const;
     int fire(std::vector<bool> const &fire_vector);
     unsigned get_place_count() const;
     unsigned get_transition_count() const;
+    std::shared_ptr<PetriNetParser> const& get_parser() const;
 
     std::string str() const;
 

@@ -82,10 +82,10 @@ PetriNet& PetriNet::operator=(PetriNet const &other) {
     return *this;
 }
 
-void PetriNet::set_state(vector<unsigned> state) {
-    assert(state.size() == place_count);
+void PetriNet::set_state(PetriNetState const & state) {
+    assert(state.tokens.size() == place_count);
     for (unsigned i = 0; i < place_count; ++i) {
-        places[i]->set_tokens(state[i]);
+        places[i]->set_tokens(state.tokens[i]);
     }
 }
 
@@ -98,11 +98,12 @@ void PetriNet::update_state(string const &name, unsigned tokens) {
     places.at(index)->set_tokens(tokens);
 }
 
-vector<unsigned> PetriNet::get_state() const {
-    vector<unsigned> state(place_count);
-    for (unsigned i=0; i<place_count; ++i)
-        state[i] = places[i]->get_tokens();
-    return state;
+PetriNetState PetriNet::get_state() const {
+    vector<unsigned> tokens(place_count, 0);
+    for (unsigned i = 0; i < place_count; ++i) {
+        tokens[i] = places[i]->get_tokens();
+    }
+    return PetriNetState(tokens);
 }
 
 unsigned PetriNet::get_place_count() const {
@@ -131,6 +132,10 @@ int PetriNet::fire(std::vector<bool> const &fire_vector) {
 
     // No errors
     return 0;
+}
+
+std::shared_ptr<PetriNetParser> const& PetriNet::get_parser() const {
+    return parser;
 }
 
 string PetriNet::str() const {

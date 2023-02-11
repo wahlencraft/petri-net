@@ -7,41 +7,26 @@
 
 #include "petri_net.h"
 #include "verification_exceptions.h"
-
-struct VectorHash {
-    size_t operator()(std::vector<unsigned> const &v) const {
-        std::hash<unsigned> hasher;
-        size_t seed = 0;
-        for (unsigned i : v) {
-            seed ^= hasher(i) + 0x9e3779b9 + (seed<<6) + (seed>>2);
-        }
-        return seed;
-    }
-};
-
-struct Constraints {
-    std::vector<unsigned> max_tokens{};
-    long unsigned max_depth = 10000;
-    bool require_live = false;
-    std::unordered_set<std::vector<unsigned>, VectorHash> illegal_states{};
-};
+#include "constraints.h"
 
 class Verifier {
 public:
-    Verifier();
+    Verifier(PetriNet const &petri_net);
 
-    void verify(PetriNet const &initial_net);
-    void set_constraints(Constraints const &constraints);
-    std::vector<unsigned> const & get_max_bounds() const;
-    bool reached_state(std::vector<unsigned> const &state) const;
+    void verify();
+    std::vector<unsigned> const& get_max_bounds() const;
+    std::string get_max_bounds_as_string() const;
+    bool reached_state(PetriNetState const &state) const;
     size_t get_state_count() const;
+
+    Constraints constraints;
 private:
     void verify(PetriNet const &initial_net, unsigned current_depth);
     void check_boundness(PetriNet const &net);
     void check_reachability(PetriNet const &net);
 
-    struct Constraints constraints;
-    std::unordered_set<std::vector<unsigned>, VectorHash> previous_states{};
+    std::unordered_set<PetriNetState, PetriNetStateHash> previous_states{};
+    PetriNet const initial_net;
     std::vector<unsigned> token_max{};
 };
 

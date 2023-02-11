@@ -6,22 +6,18 @@
 
 using namespace std;
 
-Verifier::Verifier(): constraints{} {}
+Verifier::Verifier(PetriNet const &petri_net): constraints{petri_net.get_parser()}, initial_net{petri_net} {}
 
-void Verifier::set_constraints(Constraints const &c) {
-    constraints = c;
-}
-
-void Verifier::verify(PetriNet const &initial_net) {
+void Verifier::verify() {
     previous_states.clear();
-    token_max = initial_net.get_state();
+    token_max = initial_net.get_state().tokens;
     verify(initial_net, 0);
 }
 
 void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
 
-    if (current_depth > constraints.max_depth) {
-        throw runtime_error{string("Verifier reached max depth (") + to_string(constraints.max_depth) + string(")")};
+    if (current_depth > constraints.max_depth()) {
+        throw runtime_error{string("Verifier reached max depth (") + to_string(constraints.max_depth()) + string(")")};
     }
 
     check_boundness(petri_net);
@@ -40,7 +36,7 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
         } else {
             ++live_transitions;
             // Legal fire, active_net is now in a new state
-            vector<unsigned> const &state = active_net.get_state();
+            PetriNetState const &state = active_net.get_state();
             if (previous_states.count(state) == 0) {
                 // This is a new state
                 verify(active_net, current_depth + 1);
@@ -61,36 +57,33 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
     }
 
     if (live_transitions == 0) {
-        if (constraints.require_live) {
+        if (constraints.require_live()) {
             throw LivenessException{"PetriNet no longer live"};
         }
     }
 }
 
 void Verifier::check_boundness(PetriNet const &net) {
-    size_t const size = constraints.max_tokens.size();
-    if (size > 0) {
-        vector<unsigned> current_state = net.get_state();
-        assert(size == current_state.size());
+    PetriNetState const &current_state = net.get_state();
+    bool constraints_satisfied = true;
+    for (unsigned i = 0; i < initial_net.get_place_count(); ++i) {
+        if (current_state.tokens[i] > constraints.get_max_token(i))
+            constraints_satisfied = false;
+        token_max[i] = max(token_max[i], current_state.tokens[i]);
+    }
+    if (!constraints_satisfied) {
         stringstream ss;
-        bool constraints_satisfied = true;
-        for (unsigned i=0; i < size; ++i) {
-            ss << current_state[i] << "/" << constraints.max_tokens[i] << " ";
-            if (current_state[i] > constraints.max_tokens[i]) {
-                constraints_satisfied = false;
-            }
-            token_max[i] = max(token_max[i], current_state[i]);
+        for (unsigned i = 0; i < initial_net.get_place_count(); ++i) {
+            ss << current_state.tokens[i] << "/" << constraints.get_max_token(i) << " ";
         }
-        if (!constraints_satisfied) {
-            throw BoundednessException("Net does not satisfy boundedness constraints: " + ss.str());
-        }
+        throw BoundednessException("Net does not satisfy boundedness constraints: " + ss.str());
     }
 }
 
 void Verifier::check_reachability(PetriNet const &net) {
-    if (constraints.illegal_states.count(net.get_state())) {
+    if (constraints.is_illegal(net.get_state())) {
         stringstream ss;
-        for (auto token : net.get_state())
+        for (auto token : net.get_state().tokens)
             ss << token << " ";
         throw ReachabilityException{"Illegal state (" + ss.str() + ") reached"};
     }
@@ -100,7 +93,12 @@ std::vector<unsigned> const & Verifier::get_max_bounds() const {
     return token_max;
 }
 
-bool Verifier::reached_state(vector<unsigned> const &state) const {
+string Verifier::get_max_bounds_as_string() const {
+    stringstream ss;
+    return "";
+}
+
+bool Verifier::reached_state(PetriNetState const &state) const {
     return previous_states.count(state);
 }
 
