@@ -101,3 +101,23 @@ With reachability checks                       100             1    18.7682 ms
 
 total heap usage: 11,438 allocs, 11,438 frees, 378,720 bytes allocated
 
+ab5b3d7
+-------------------------------------------------------------------------------
+No extra checks                                100             1    19.9377 ms
+                                        202.565 us    201.656 us    204.265 us
+                                        6.15924 us     3.8057 us    11.8376 us
+
+Liveness check                                 100             1    19.9099 ms
+                                        205.844 us    204.856 us     207.84 us
+                                        6.86704 us    4.18261 us    13.3872 us
+
+With boundedness                               100             1    19.8898 ms
+                                        206.306 us    205.281 us    207.494 us
+                                        5.61229 us    4.66018 us    7.95465 us
+
+With reachability checks                       100             1    19.9609 ms
+                                        204.241 us    203.173 us    205.469 us
+                                        5.82962 us    5.04033 us    7.69042 us
+
+total heap usage: 11,767 allocs, 11,767 frees, 386,560 bytes allocated
+
