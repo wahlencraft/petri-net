@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_set>
 #include <unordered_map>
+#include <memory>
 
 #include "place.h"
 #include "transition.h"
@@ -34,7 +35,7 @@ private:
     std::vector<std::vector<unsigned>> transition_out_mappings;
     std::vector<Place *> places;
     std::vector<Transition *> transitions;
-    PetriNetParser parser;
+    std::shared_ptr<PetriNetParser> parser;
     unsigned place_count;
     unsigned transition_count;
 };
