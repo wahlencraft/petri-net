@@ -19,6 +19,9 @@ public:
     PetriNet& operator=(PetriNet const &other);
 
     void set_state(std::vector<unsigned> state);
+    void update_state(unsigned index, unsigned tokens);
+    void update_state(std::string const &name, unsigned tokens);
+
     std::vector<unsigned> get_state() const;
     int fire(std::vector<bool> const &fire_vector);
     unsigned get_place_count() const;
@@ -31,6 +34,7 @@ private:
     std::vector<std::vector<unsigned>> transition_out_mappings;
     std::vector<Place *> places;
     std::vector<Transition *> transitions;
+    PetriNetParser parser;
     unsigned place_count;
     unsigned transition_count;
 };

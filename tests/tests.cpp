@@ -181,6 +181,40 @@ TEST_CASE("PetriNetParser") {
         CHECK( out_mapping2 == vector<unsigned>{4} );
         CHECK( out_mapping3 == vector<unsigned>{3} );
     }
+
+    SECTION("Extract indexes") {
+        PetriNetParser parser{};
+
+        // Each PX will be given an internal index
+        // In this case they appear in numerical order, so
+        // PX will have index X
+
+        // Check that we can extract that index
+
+        string arg0 = "P0     -> T0 -> P1";
+        string arg1 = "P1     -> T1 -> P0, P2";
+        string arg2 = "P2, P3 -> T2 -> P4";
+        string arg3 = "P4     -> T3 -> P3";
+        vector<unsigned> in_mapping0 = parser.get_in_mapping(arg0);
+        vector<unsigned> in_mapping1 = parser.get_in_mapping(arg1);
+        vector<unsigned> in_mapping2 = parser.get_in_mapping(arg2);
+        vector<unsigned> in_mapping3 = parser.get_in_mapping(arg3);
+        vector<unsigned> out_mapping0 = parser.get_out_mapping(arg0);
+        vector<unsigned> out_mapping1 = parser.get_out_mapping(arg1);
+        vector<unsigned> out_mapping2 = parser.get_out_mapping(arg2);
+        vector<unsigned> out_mapping3 = parser.get_out_mapping(arg3);
+
+        CHECK( parser.get_place_index("P0") == 0 );
+        CHECK( parser.get_place_index("P1") == 1 );
+        CHECK( parser.get_place_index("P2") == 2 );
+        CHECK( parser.get_place_index("P3") == 3 );
+        CHECK( parser.get_place_index("P4") == 4 );
+
+        CHECK( parser.get_transition_index("T0") == 0 );
+        CHECK( parser.get_transition_index("T1") == 1 );
+        CHECK( parser.get_transition_index("T2") == 2 );
+        CHECK( parser.get_transition_index("T3") == 3 );
+     }
 }
 
 TEST_CASE("PetriNet") {
@@ -202,8 +236,7 @@ TEST_CASE("PetriNet") {
             "P0 -> T0 -> P1",
             "P1 -> T1 -> P2, P3"
         };
-        vector<unsigned> state{1, 0, 0, 0};
-        net.set_state(state);
+        net.update_state("P0", 1);
 
         vector<bool> const fire_vector0{1, 0};
         vector<bool> const fire_vector1{0, 1};

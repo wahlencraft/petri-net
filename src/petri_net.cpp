@@ -9,8 +9,7 @@ using namespace std;
 
 PetriNet::PetriNet(std::initializer_list<string> lst):
     transition_in_mappings{}, transition_out_mappings{},
-    places{}, transitions{}, place_count{}, transition_count{} {
-    PetriNetParser parser{};
+    places{}, transitions{}, parser{}, place_count{}, transition_count{} {
     for (string arg : lst) {
         transition_in_mappings.push_back(parser.get_in_mapping(arg));
         parser.register_transition(arg);
@@ -42,6 +41,7 @@ PetriNet::PetriNet(PetriNet const &other):
     transition_out_mappings{other.transition_out_mappings},
     places(other.place_count, nullptr),
     transitions(other.transition_count, nullptr),
+    parser{other.parser},
     place_count{other.place_count},
     transition_count{other.transition_count} {
 
@@ -85,6 +85,15 @@ void PetriNet::set_state(vector<unsigned> state) {
     for (unsigned i = 0; i < place_count; ++i) {
         places[i]->set_tokens(state[i]);
     }
+}
+
+void PetriNet::update_state(unsigned index, unsigned tokens) {
+    places.at(index)->set_tokens(tokens);
+}
+
+void PetriNet::update_state(string const &name, unsigned tokens) {
+    unsigned index = parser.get_place_index(name);
+    places.at(index)->set_tokens(tokens);
 }
 
 vector<unsigned> PetriNet::get_state() const {
