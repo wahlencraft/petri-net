@@ -29,11 +29,23 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
     vector<bool> fire_vector(transition_count, false);
     fire_vector[0] = true;
     unsigned live_transitions = 0;
+    PetriNet active_net{petri_net};
+    bool last_fire_was_illegal = false;
+    bool first_itteration = true;
     while (fire_vector != vector<bool>(transition_count, false)) {
-        PetriNet active_net{petri_net};
+        if (last_fire_was_illegal || first_itteration) {
+            // We can keep the old value of active_net
+            first_itteration = false;
+        } else {
+            // Make a new copy
+            active_net = petri_net;
+        }
+
         if (active_net.fire(fire_vector)) {
             // Illegal fire
+            last_fire_was_illegal = true;
         } else {
+            last_fire_was_illegal = false;
             ++live_transitions;
             // Legal fire, active_net is now in a new state
             PetriNetState const &state = active_net.get_state();
