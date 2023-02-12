@@ -72,10 +72,25 @@ void Verifier::check_boundness(PetriNet const &net) {
         token_max[i] = max(token_max[i], current_state.tokens[i]);
     }
     if (!constraints_satisfied) {
-        stringstream ss;
-        for (unsigned i = 0; i < initial_net.get_place_count(); ++i) {
-            ss << current_state.tokens[i] << "/" << constraints.get_max_token(i) << " ";
+        // Print a usefull error message
+        // The Place names are found in the parser, they are however stored in
+        // an unordered way. I first put them in the usual order (by index).
+        shared_ptr<PetriNetParser> parser = net.get_parser();
+        unordered_map<string, unsigned> const &place_map = parser->get_place_map();
+        vector<string> place_names(place_map.size());
+        for (auto const &[place_name, index]: place_map) {
+            place_names.at(index) = place_name;
         }
+        stringstream ss;
+        for (unsigned i = 0; i < place_names.size() - 1; ++i) {
+            ss << place_names[i] << ": "
+               << current_state.tokens[i] << "/"
+               << constraints.get_max_token(i) << ", ";
+        }
+        ss << place_names[place_names.size() - 1] << ": "
+           << current_state.tokens[place_names.size() - 1] << "/"
+           << constraints.get_max_token(place_names.size() - 1);
+
         throw BoundednessException("Net does not satisfy boundedness constraints: " + ss.str());
     }
 }

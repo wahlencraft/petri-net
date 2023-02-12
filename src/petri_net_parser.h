@@ -23,6 +23,10 @@ public:
         return found_transitions;
     }
 
+
+    std::unordered_map<std::string, unsigned> const& get_place_map() const;
+    std::unordered_map<std::string, unsigned> const& get_transition_map() const;
+
 private:
     std::unordered_map<std::string, unsigned> places{};
     std::unordered_map<std::string, unsigned> transitions{};

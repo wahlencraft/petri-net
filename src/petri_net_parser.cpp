@@ -96,3 +96,11 @@ unsigned PetriNetParser::get_transition_index(string const &name) {
     return transitions.at(name);
 }
 
+
+unordered_map<string, unsigned> const& PetriNetParser::get_place_map() const {
+    return places;
+}
+
+unordered_map<string, unsigned> const& PetriNetParser::get_transition_map() const {
+    return transitions;
+}
