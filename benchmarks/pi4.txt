@@ -6,7 +6,7 @@ No extra checks                                100             1    144.798 ms
                                         1.46036 ms    1.45923 ms    1.46192 ms
                                         6.70398 us    5.17729 us     10.746 us
 
-jLiveness check                                 100             1    145.616 ms
+Liveness check                                 100             1    145.616 ms
                                          1.4713 ms    1.46997 ms    1.47292 ms
                                         7.44345 us    6.18079 us    10.6228 us
 
@@ -53,4 +53,58 @@ With boundedness                               100             1    130.446 ms
 With reachability checks                       100             1    118.425 ms
                                         1.17876 ms    1.17804 ms    1.18036 ms
                                         5.18339 us    2.95462 us    10.2427 us
+
+db0d109t
+-------------------------------------------------------------------------------
+No extra checks                                100             1    193.018 ms
+                                        1.92249 ms    1.92153 ms    1.92404 ms
+                                        6.12999 us    4.41231 us     10.627 us
+
+Liveness check                                 100             1    193.236 ms
+                                        1.92939 ms    1.92806 ms     1.9314 ms
+                                        8.25495 us    5.98003 us    12.8698 us
+
+With boundedness                               100             1    204.234 ms
+                                        2.05481 ms    2.05363 ms    2.05647 ms
+                                        7.03908 us    5.21153 us    10.3091 us
+
+With reachability checks                       100             1    193.257 ms
+                                        1.94552 ms    1.94436 ms     1.9475 ms
+                                        7.56099 us    4.97249 us    12.5992 us
+
+3b9fc18
+-------------------------------------------------------------------------------
+No extra checks                                100             1    119.598 ms
+                                        1.19453 ms    1.19375 ms    1.19616 ms
+                                        5.53809 us    3.29498 us    10.6486 us
+
+Liveness check                                 100             1     119.72 ms
+                                        1.19145 ms    1.19066 ms    1.19316 ms
+                                        5.66402 us    3.28813 us    11.1355 us
+
+With boundedness                               100             1     130.18 ms
+                                        1.30757 ms    1.30658 ms    1.30921 ms
+                                        6.32286 us    4.26941 us    10.0284 us
+
+With reachability checks                       100             1    119.766 ms
+                                        1.20062 ms    1.19988 ms    1.20198 ms
+                                        4.93382 us    3.21815 us    9.07196 us
+
+ab5b3d7
+-------------------------------------------------------------------------------
+No extra checks                                100             1    125.164 ms
+                                        1.25087 ms    1.24991 ms    1.25287 ms
+                                        6.78296 us    3.79666 us    12.4612 us
+
+Liveness check                                 100             1    124.893 ms
+                                         1.2453 ms    1.24396 ms    1.24761 ms
+                                        8.76975 us    5.66781 us    12.9911 us
+
+With boundedness                               100             1    124.752 ms
+                                        1.24488 ms    1.24352 ms    1.24688 ms
+                                        8.34951 us    6.19126 us    11.3798 us
+
+With reachability checks                       100             1    125.038 ms
+                                        1.25555 ms    1.25424 ms    1.25744 ms
+                                        7.93249 us    6.04563 us    11.2229 us
 
