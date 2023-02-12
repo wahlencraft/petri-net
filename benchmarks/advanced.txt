@@ -16,3 +16,20 @@ to 5.5 GHz and 3600 MT/s CL 17 memory.
                                         919.566 us    800.426 us    1.10103 ms
 
 total heap usage: 29,655,275 allocs, 29,655,275 frees, 866,193,480 bytes allocated
+
+fc589de
+-------------------------------------------------------------------------------
+6 Places, 4 Transitions                        100             1     9.0842 ms
+                                        92.3083 us     91.919 us     93.286 us
+                                        2.86501 us    637.976 ns    5.22063 us
+
+11 Places, 5 Transitions                       100             1    26.4762 ms
+                                        267.458 us    266.939 us    269.458 us
+                                        4.69239 us    846.331 ns    11.0212 us
+
+16 Places, 10 Transitions                      100             1     11.8664 s
+                                        118.902 ms    118.884 ms    118.921 ms
+                                        92.3955 us    80.3561 us    110.139 us
+
+total heap usage: 837,395 allocs, 837,395 frees, 16,842,632 bytes allocated
+
