@@ -139,14 +139,18 @@ std::shared_ptr<PetriNetParser> const& PetriNet::get_parser() const {
 }
 
 string PetriNet::str() const {
-    stringstream ss;
-    for (unsigned i = 0; i < transition_in_mappings.size(); ++i) {
-        for (unsigned idx : transition_in_mappings[i])
-            ss << idx << "(" << places[idx]->get_tokens() << ") ";
-        ss << "-> T -> ";
-        for (unsigned idx : transition_out_mappings[i])
-            ss << idx << "(" << places[idx]->get_tokens() << ") ";
-        ss << ", ";
+    unordered_map<string, unsigned> const &place_map = parser->get_place_map();
+    vector<string> place_names(place_map.size());
+    for (auto const &[place_name, index]: place_map) {
+        place_names.at(index) = place_name;
     }
+    stringstream ss;
+    PetriNetState const &current_state = get_state();
+    for (unsigned i = 0; i < place_names.size() - 1; ++i) {
+        ss << place_names[i] << ": "
+           << current_state.tokens[i] << ", ";
+    }
+    ss << place_names[place_names.size() - 1] << ": "
+       << current_state.tokens[place_names.size() - 1];
     return ss.str();
 }

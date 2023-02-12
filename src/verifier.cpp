@@ -58,7 +58,9 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
 
     if (live_transitions == 0) {
         if (constraints.require_live()) {
-            throw LivenessException{"PetriNet no longer live"};
+            throw LivenessException{
+                "PetriNet not live at depth " + to_string(current_depth) + 
+                "\n\tState: " + petri_net.str()};
         }
     }
 }
