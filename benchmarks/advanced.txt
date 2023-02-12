@@ -1,0 +1,18 @@
+These benchmarks was recorded on a i5-13600K with the fastest core overclocked
+to 5.5 GHz and 3600 MT/s CL 17 memory.
+
+69141c1
+-------------------------------------------------------------------------------
+6 Places, 4 Transitions                        100             1    20.2659 ms
+                                        203.182 us    202.223 us    204.154 us
+                                        4.90888 us    4.36531 us    5.59551 us
+
+11 Places, 5 Transitions                       100             1    71.0376 ms
+                                        713.019 us    712.419 us    713.714 us
+                                        3.29653 us    2.86013 us    4.21966 us
+
+16 Places, 10 Transitions                      100             1     43.9358 s
+                                        440.024 ms    439.844 ms    440.204 ms
+                                        919.566 us    800.426 us    1.10103 ms
+
+total heap usage: 29,655,275 allocs, 29,655,275 frees, 866,193,480 bytes allocated

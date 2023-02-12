@@ -507,7 +507,7 @@ TEST_CASE("Verifier") {
         CHECK_THROWS_AS(verifier.verify(), ReachabilityException);
     }
 
-    BENCHMARK_ADVANCED("Simple net")(Catch::Benchmark::Chronometer meter) {
+    BENCHMARK_ADVANCED("6 Places, 4 Transitions")(Catch::Benchmark::Chronometer meter) {
         PetriNet bound_net{
             "G0     -> T0  -> G1",
             "G1, B1 -> T1  -> G0, B0",
@@ -523,7 +523,7 @@ TEST_CASE("Verifier") {
         meter.measure([&verifier] { verifier.verify(); });
     };
 
-    BENCHMARK_ADVANCED("Advanced net 1")(Catch::Benchmark::Chronometer meter) {
+    BENCHMARK_ADVANCED("11 Places, 5 Transitions")(Catch::Benchmark::Chronometer meter) {
         PetriNet bound_net{
             "G0     -> T0  -> G1",
             "G1, B1 -> T1  -> G0, B0",
@@ -541,7 +541,7 @@ TEST_CASE("Verifier") {
         meter.measure([&verifier] { verifier.verify(); });
     };
 
-    BENCHMARK_ADVANCED("Advanced net 2")(Catch::Benchmark::Chronometer meter) {
+    BENCHMARK_ADVANCED("16 Places, 10 Transitions")(Catch::Benchmark::Chronometer meter) {
         PetriNet bound_net{
             "G0     -> T0  -> G1",
             "G1, B1 -> T1  -> G0, B0",
