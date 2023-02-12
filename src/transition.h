@@ -20,7 +20,7 @@ public:
 
     /* Prepare all preceding places for a fire. If the fire-pattern is legal
      * the preceding places will decrease thair tokens next Place::update() */
-    void fire();
+    void fire() const;
 
 private:
     std::vector<Place*> predecessors;

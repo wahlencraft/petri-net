@@ -123,12 +123,35 @@ int PetriNet::fire(std::vector<bool> const &fire_vector) {
         }
     }
 
-    // Update every Place. If a Place reports an error return 1
-    for (unsigned i=0; i < place_count; ++i) {
-        if (places[i]->update()) {
-            return 1;
-        }
+    unsigned error_count = 0;
+    for (unsigned i = 0; i < place_count; ++i) {
+        error_count += places[i]->update();
     }
+
+    if (error_count > 0) {
+        // Restore the PetriNet to before the update
+        for (unsigned i = 0; i < place_count; ++i) {
+            places[i]->restore();
+        }
+        return 1;
+    }
+
+    // Update every Place. Stop if one place returns 1
+    //unsigned i;
+    //for (i = 0; i < place_count; ++i) {
+    //    if (places[i]->update()) {
+    //        cout << "err" << endl;
+    //        break;
+    //    }
+    //}
+    //// If the update failed, restored all updated places and return 1
+    //if (i < place_count) {
+    //    cout << "Restore" << endl;
+    //    //for (unsigned j = 0; j <= i; ++j) {
+    //        //places[j]->restore();
+    //    //}
+    //    return 1;
+    //}
 
     // No errors
     return 0;

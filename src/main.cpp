@@ -33,10 +33,6 @@ int main() {
     verifier.constraints.set_global_bound(1);
     verifier.constraints.set_bound("B0", 5);
     verifier.constraints.set_bound("B1", 5);
-    //verifier.constraints.set_illegal_state(vector<unsigned>{1, 1, 5, 0, 0, 1});
-    //verifier.constraints.set_illegal_state(vector<unsigned>{1, 0, 5, 0, 1, 1});
-    //verifier.constraints.set_illegal_state(vector<unsigned>{1, 0, 3, 3, 0, 1});
-    //verifier.constraints.set_illegal_state(vector<unsigned>{1, 0, 5, 1, 0, 1});
 
     verifier.verify();
 

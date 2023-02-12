@@ -36,18 +36,21 @@ void Place::give_token() {
     ++input_tokens;
 }
 
-/* After a global fire cycle. Call update() on all places. Return 0 if the 
- * fireing was legal, otherwise 1. If update() returns 1 the object is
- * invalid and should not be used agian. */
 int Place::update() {
+    last_tokens = tokens;
     if (tokens >= output_tokens) {
         tokens = tokens - output_tokens + input_tokens;
         input_tokens = 0;
         output_tokens = 0;
         return 0;
     } else {
-        input_tokens = 0;
-        output_tokens = 0;
         return 1;
     }
 }
+
+void Place::restore() {
+    tokens = last_tokens;
+    input_tokens = 0;
+    output_tokens = 0;
+}
+

@@ -47,7 +47,7 @@ std::string Transition::str() const {
     return class_name + " " + input_map.str() + "-> " + output_map.str();
 }
 
-void Transition::fire() {
+void Transition::fire() const {
     for (unsigned i = 0; i < predecessor_count; ++i)
         predecessors[i]->take_token();
     for (unsigned i = 0; i < successor_count; ++i)

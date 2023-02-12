@@ -125,7 +125,6 @@ TEST_CASE("Place/Transition") {
         for (auto transition : transitions_2)
             delete transition;
     }
-
 }
 
 TEST_CASE("PetriNetParser") {
@@ -295,7 +294,6 @@ TEST_CASE("PetriNet") {
         net.set_state(state);
 
         vector<bool> const fire_vector0{1, 0, 0, 0};
-
         CHECK(net.fire(fire_vector0) == 0);
         CHECK(net.get_state() == vector<unsigned>{0, 1, 0, 1, 0});
 
@@ -307,13 +305,19 @@ TEST_CASE("PetriNet") {
         CHECK(net.fire(fire_vector2) == 0);
         CHECK(net.get_state() == vector<unsigned>{1, 0, 0, 0, 1});
 
-        vector<bool> const fire_vector3{1, 0, 0, 1};
-        CHECK(net.fire(fire_vector3) == 0);
-        CHECK(net.get_state() == vector<unsigned>{0, 1, 0, 1, 0});
+        PetriNet net_copy = net;
 
-        // Illegal fire_vector
-        vector<bool> const fire_vector4{1, 0, 0, 0};
-        CHECK(net.fire(fire_vector4) == 1);
+        // Illegal fire vector
+        vector<bool> const fire_vector3{1, 1, 0, 1};
+        CHECK(net.fire(fire_vector3) == 1);
+        // Check that the state is unchanged
+        CHECK(net.get_state() == net_copy.get_state());
+
+        vector<bool> const fire_vector4{1, 0, 0, 1};
+        CHECK(net.fire(fire_vector4) == 0);
+        CHECK(net_copy.fire(fire_vector4) == 0);
+        CHECK(net.get_state() == vector<unsigned>{0, 1, 0, 1, 0});
+        CHECK(net_copy.get_state() == vector<unsigned>{0, 1, 0, 1, 0});
 
     }
 }
