@@ -6,8 +6,8 @@
 
 using namespace std;
 
-Verifier::Verifier(PetriNet const &petri_net):
-    constraints{petri_net.get_parser()}, initial_net{petri_net} {}
+Verifier::Verifier(PetriNet const &petri_net, unsigned max_threads):
+    constraints{petri_net.get_parser()}, initial_net{petri_net}, thread_pool{max_threads} {}
 
 Verifier::~Verifier() {}
 
@@ -16,7 +16,7 @@ void Verifier::verify() {
     abort = false;
     token_max = initial_net.get_state().tokens;
     verify(initial_net, 0);
-    // Todo wait for all threads
+    thread_pool.wait_for_jobs_to_finish();
     if (abort) {
         rethrow_exception(exception);
     }
@@ -63,7 +63,9 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
             if (!reached_state(state)) {
                 // This is a new state
                 if (!abort)
-                    verify(active_net, current_depth + 1);
+                    thread_pool.enqueue( [this, active_net, current_depth]() {
+                        verify(active_net, current_depth + 1);
+                    });
             } else {
                 // Known state
             }

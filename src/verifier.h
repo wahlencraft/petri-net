@@ -11,11 +11,11 @@
 #include "petri_net.h"
 #include "verification_exceptions.h"
 #include "constraints.h"
-//#include "thread_pool.h"
+#include "thread_pool.h"
 
 class Verifier {
 public:
-    Verifier(PetriNet const &petri_net);
+    Verifier(PetriNet const &petri_net, unsigned max_threads=0);
     ~Verifier();
 
     void verify();
@@ -41,7 +41,7 @@ private:
     PetriNet const initial_net;
     std::vector<unsigned> token_max{};
 
-    //ThreadPool thread_pool;
+    ThreadPool thread_pool;
     std::mutex mtx{};
     std::condition_variable cv{};
 
