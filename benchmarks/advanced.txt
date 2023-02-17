@@ -33,3 +33,50 @@ fc589de
 
 total heap usage: 837,395 allocs, 837,395 frees, 16,842,632 bytes allocated
 
+57085bf
+-------------------------------------------------------------------------------
+6 Places, 4 Transitions                        100             1      9.417 ms
+                                        94.5976 us    94.4724 us    94.7344 us
+                                        665.561 ns    585.205 ns    779.155 ns
+
+11 Places, 5 Transitions                       100             1    27.2187 ms
+                                        273.599 us    273.162 us    275.076 us
+                                        3.68898 us    1.22974 us    8.35751 us
+
+16 Places, 10 Transitions                      100             1     12.2861 s
+                                        123.013 ms    122.996 ms    123.031 ms
+                                        88.4919 us    76.4064 us    104.288 us
+
+total heap usage: 837,899 allocs, 837,899 frees, 16,808,080 bytes allocated
+
+6dc95a3
+-------------------------------------------------------------------------------
+6 Places, 4 Transitions                        100             1    25.7087 ms
+                                        249.436 us    210.502 us    401.802 us
+                                        330.578 us    27.2686 us     761.23 us
+
+11 Places, 5 Transitions                       100             1    31.3604 ms
+                                        302.834 us    274.729 us    382.995 us
+                                        214.337 us     37.197 us    444.616 us
+
+16 Places, 10 Transitions (4
+threads)                                       100             1     3.29327 s
+                                        33.0827 ms    33.0475 ms    33.1369 ms
+                                        219.415 us    157.659 us    338.328 us
+
+16 Places, 10 Transitions (8
+threads)                                       100             1     1.82084 s
+                                        18.1085 ms     18.056 ms    18.1866 ms
+                                        322.143 us    237.927 us    459.374 us
+
+16 Places, 10 Transitions (16
+threads)                                       100             1     1.05308 s
+                                        10.8098 ms    10.7489 ms    10.9038 ms
+                                         377.28 us    282.767 us    601.545 us
+
+16 Places, 10 Transitions                      100             1    973.825 ms
+                                        10.3655 ms    10.3106 ms    10.4207 ms
+                                        281.957 us    253.781 us    314.904 us
+
+total heap usage: 924,469 allocs, 924,469 frees, 19,543,832 bytes allocated
+
