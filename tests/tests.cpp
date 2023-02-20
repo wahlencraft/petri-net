@@ -545,6 +545,78 @@ TEST_CASE("Verifier") {
         meter.measure([&verifier] { verifier.verify(); });
     };
 
+    BENCHMARK_ADVANCED("16 Places, 10 Transitions (4 threads)")(Catch::Benchmark::Chronometer meter) {
+        PetriNet bound_net{
+            "G0     -> T0  -> G1",
+            "G1, B1 -> T1  -> G0, B0",
+            "B0, C1 -> T2  -> B1, C0",
+            "C0     -> T3  -> W00, W01, W02, W03, W04",
+
+            "W00    -> TW0 -> W10",
+            "W01    -> TW1 -> W11",
+            "W02    -> TW2 -> W12",
+            "W03    -> TW3 -> W13",
+            "W04    -> TW4 -> W14",
+
+            "W10, W11, W12, W13, W14 -> T4 -> C1"
+        };
+        bound_net.update_state("G0", 1);
+        bound_net.update_state("B1", 5);
+        bound_net.update_state("C1", 1);
+
+        Verifier verifier{bound_net, 4};
+        verifier.constraints.require_live();
+        meter.measure([&verifier] { verifier.verify(); });
+    };
+
+    BENCHMARK_ADVANCED("16 Places, 10 Transitions (8 threads)")(Catch::Benchmark::Chronometer meter) {
+        PetriNet bound_net{
+            "G0     -> T0  -> G1",
+            "G1, B1 -> T1  -> G0, B0",
+            "B0, C1 -> T2  -> B1, C0",
+            "C0     -> T3  -> W00, W01, W02, W03, W04",
+
+            "W00    -> TW0 -> W10",
+            "W01    -> TW1 -> W11",
+            "W02    -> TW2 -> W12",
+            "W03    -> TW3 -> W13",
+            "W04    -> TW4 -> W14",
+
+            "W10, W11, W12, W13, W14 -> T4 -> C1"
+        };
+        bound_net.update_state("G0", 1);
+        bound_net.update_state("B1", 5);
+        bound_net.update_state("C1", 1);
+
+        Verifier verifier{bound_net, 8};
+        verifier.constraints.require_live();
+        meter.measure([&verifier] { verifier.verify(); });
+    };
+
+    BENCHMARK_ADVANCED("16 Places, 10 Transitions (16 threads)")(Catch::Benchmark::Chronometer meter) {
+        PetriNet bound_net{
+            "G0     -> T0  -> G1",
+            "G1, B1 -> T1  -> G0, B0",
+            "B0, C1 -> T2  -> B1, C0",
+            "C0     -> T3  -> W00, W01, W02, W03, W04",
+
+            "W00    -> TW0 -> W10",
+            "W01    -> TW1 -> W11",
+            "W02    -> TW2 -> W12",
+            "W03    -> TW3 -> W13",
+            "W04    -> TW4 -> W14",
+
+            "W10, W11, W12, W13, W14 -> T4 -> C1"
+        };
+        bound_net.update_state("G0", 1);
+        bound_net.update_state("B1", 5);
+        bound_net.update_state("C1", 1);
+
+        Verifier verifier{bound_net, 16};
+        verifier.constraints.require_live();
+        meter.measure([&verifier] { verifier.verify(); });
+    };
+
     BENCHMARK_ADVANCED("16 Places, 10 Transitions")(Catch::Benchmark::Chronometer meter) {
         PetriNet bound_net{
             "G0     -> T0  -> G1",
