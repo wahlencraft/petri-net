@@ -80,3 +80,37 @@ threads)                                       100             1     1.05308 s
 
 total heap usage: 924,469 allocs, 924,469 frees, 19,543,832 bytes allocated
 
+f839909
+-------------------------------------------------------------------------------
+6 Places, 4 Transitions                        100             1    16.6673 ms
+                                        187.617 us     173.77 us    235.097 us
+                                        115.451 us    20.1196 us    258.437 us
+
+11 Places, 5 Transitions                       100             1    22.1624 ms
+                                        242.868 us    224.464 us    313.418 us
+                                        166.989 us    27.4212 us    393.479 us
+
+16 Places, 10 Transitions (1
+thread)                                        100             1    472.586 ms
+                                        7.98521 ms    7.50472 ms    8.53084 ms
+                                        2.58568 ms    2.26241 ms    3.21037 ms
+
+16 Places, 10 Transitions (4
+threads)                                       100             1    263.852 ms
+                                        2.75029 ms    2.72512 ms    2.77933 ms
+                                        138.316 us    121.786 us    164.501 us
+
+16 Places, 10 Transitions (8
+threads)                                       100             1    214.322 ms
+                                        2.16047 ms    2.14819 ms    2.17579 ms
+                                        69.5212 us    57.7351 us    95.8508 us
+
+16 Places, 10 Transitions (16
+threads)                                       100             1    208.178 ms
+                                        2.06681 ms    2.05676 ms    2.08256 ms
+                                        63.0881 us    44.4485 us    111.658 us
+
+16 Places, 10 Transitions                      100             1    208.984 ms
+                                        2.06221 ms    2.05061 ms      2.083 ms
+                                        77.2779 us     49.769 us    146.074 us
+
