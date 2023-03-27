@@ -18,8 +18,8 @@ public:
 
     std::string str() const;
 
-    /* Prepare all preceding places for a fire. If the fire-pattern is legal
-     * the preceding places will decrease thair tokens next Place::update() */
+    /* Take tokens from the preceding places and give tokens to the succeding
+     * ones. */
     void fire() const;
 
 private:

@@ -28,29 +28,11 @@ bool Place::has_tokens() const {
 
 /* If there is tokens, decrease with 1 and return 0. Otherwise return 1. */
 void Place::take_token() {
-    ++output_tokens;
+    --tokens;
 }
 
 /* Increase the number of tokens with 1 */
 void Place::give_token() {
-    ++input_tokens;
-}
-
-int Place::update() {
-    last_tokens = tokens;
-    if (tokens >= output_tokens) {
-        tokens = tokens - output_tokens + input_tokens;
-        input_tokens = 0;
-        output_tokens = 0;
-        return 0;
-    } else {
-        return 1;
-    }
-}
-
-void Place::restore() {
-    tokens = last_tokens;
-    input_tokens = 0;
-    output_tokens = 0;
+    ++tokens;
 }
 

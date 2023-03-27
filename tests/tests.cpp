@@ -83,9 +83,6 @@ TEST_CASE("Place/Transition") {
 
         // Fire T0
         transitions_0[0]->fire();
-        CHECK( 0 == places_0[0]->update() );
-        CHECK( 0 == places_0[1]->update() );
-        CHECK( 0 == places_0[2]->update() );
 
         CHECK( 0 == places_0[0]->get_tokens() );
         CHECK( 1 == places_0[1]->get_tokens() );
@@ -93,9 +90,6 @@ TEST_CASE("Place/Transition") {
 
         // Fire T1
         transitions_1[1]->fire();
-        CHECK( 0 == places_1[0]->update() );
-        CHECK( 0 == places_1[1]->update() );
-        CHECK( 0 == places_1[2]->update() );
 
         CHECK( 0 == places_1[0]->get_tokens() );
         CHECK( 0 == places_1[1]->get_tokens() );
@@ -104,9 +98,6 @@ TEST_CASE("Place/Transition") {
         // Fire Both
         transitions_2[0]->fire();
         transitions_2[1]->fire();
-        CHECK( 1 == places_2[0]->update() );
-        CHECK( 0 == places_2[1]->update() );
-        CHECK( 0 == places_2[2]->update() );
 
         for (auto place : places)
             delete place;
@@ -237,27 +228,22 @@ TEST_CASE("PetriNet") {
         };
         net.update_state("P0", 1);
 
-        vector<bool> const fire_vector0{1, 0};
-        vector<bool> const fire_vector1{0, 1};
-        vector<bool> const fire_vector2{1, 1};
-
         PetriNet net0{net};
 
-        CHECK( 0 == net0.fire(fire_vector0) );
+        CHECK( 0 == net0.fire(0) );
         CHECK( net0.get_state() == PetriNetState(vector<unsigned>{0, 1, 0, 0}) );
 
         PetriNet net00 = net0;
         PetriNet net01 = net0;
-        CHECK( 1 == net00.fire(fire_vector0) );
-        CHECK( 0 == net01.fire(fire_vector1) );
+        CHECK( 1 == net00.fire(0) );
+        CHECK( 0 == net01.fire(1) );
         CHECK( net01.get_state() == PetriNetState(vector<unsigned>{0, 0, 1, 1}) );
 
         PetriNet net010 = net01;
         PetriNet net011 = net01;
         PetriNet net012 = net01;
-        CHECK( 1 == net010.fire(fire_vector0) );
-        CHECK( 1 == net011.fire(fire_vector1) );
-        CHECK( 1 == net012.fire(fire_vector2) );
+        CHECK( 1 == net010.fire(0) );
+        CHECK( 1 == net011.fire(1) );
 
     }
 
@@ -293,29 +279,26 @@ TEST_CASE("PetriNet") {
         vector<unsigned> state{1, 0, 0, 1, 0};
         net.set_state(state);
 
-        vector<bool> const fire_vector0{1, 0, 0, 0};
-        CHECK(net.fire(fire_vector0) == 0);
+        CHECK(net.fire(0) == 0);
         CHECK(net.get_state() == vector<unsigned>{0, 1, 0, 1, 0});
 
-        vector<bool> const fire_vector1{0, 1, 0, 0};
-        CHECK(net.fire(fire_vector1) == 0);
+        CHECK(net.fire(1) == 0);
         CHECK(net.get_state() == vector<unsigned>{1, 0, 1, 1, 0});
 
-        vector<bool> const fire_vector2{0, 0, 1, 0};
-        CHECK(net.fire(fire_vector2) == 0);
+        CHECK(net.fire(2) == 0);
         CHECK(net.get_state() == vector<unsigned>{1, 0, 0, 0, 1});
 
         PetriNet net_copy = net;
 
-        // Illegal fire vector
-        vector<bool> const fire_vector3{1, 1, 0, 1};
-        CHECK(net.fire(fire_vector3) == 1);
+        // Illegal fire index
+        CHECK(net.fire(2) == 1);
         // Check that the state is unchanged
         CHECK(net.get_state() == net_copy.get_state());
 
-        vector<bool> const fire_vector4{1, 0, 0, 1};
-        CHECK(net.fire(fire_vector4) == 0);
-        CHECK(net_copy.fire(fire_vector4) == 0);
+        CHECK(net.fire(0) == 0);
+        CHECK(net.fire(3) == 0);
+        CHECK(net_copy.fire(0) == 0);
+        CHECK(net_copy.fire(3) == 0);
         CHECK(net.get_state() == vector<unsigned>{0, 1, 0, 1, 0});
         CHECK(net_copy.get_state() == vector<unsigned>{0, 1, 0, 1, 0});
 
@@ -541,6 +524,30 @@ TEST_CASE("Verifier") {
         bound_net.update_state("C1", 1);
 
         Verifier verifier{bound_net};
+        verifier.constraints.require_live();
+        meter.measure([&verifier] { verifier.verify(); });
+    };
+
+    BENCHMARK_ADVANCED("16 Places, 10 Transitions (1 thread)")(Catch::Benchmark::Chronometer meter) {
+        PetriNet bound_net{
+            "G0     -> T0  -> G1",
+            "G1, B1 -> T1  -> G0, B0",
+            "B0, C1 -> T2  -> B1, C0",
+            "C0     -> T3  -> W00, W01, W02, W03, W04",
+
+            "W00    -> TW0 -> W10",
+            "W01    -> TW1 -> W11",
+            "W02    -> TW2 -> W12",
+            "W03    -> TW3 -> W13",
+            "W04    -> TW4 -> W14",
+
+            "W10, W11, W12, W13, W14 -> T4 -> C1"
+        };
+        bound_net.update_state("G0", 1);
+        bound_net.update_state("B1", 5);
+        bound_net.update_state("C1", 1);
+
+        Verifier verifier{bound_net, 1};
         verifier.constraints.require_live();
         meter.measure([&verifier] { verifier.verify(); });
     };

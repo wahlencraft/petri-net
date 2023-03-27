@@ -114,31 +114,30 @@ unsigned PetriNet::get_transition_count() const {
     return transition_count;
 }
 
-int PetriNet::fire(std::vector<bool> const &fire_vector) {
-
-    // Fire every Transition which is marked by fire_vector
-    for (unsigned i=0; i < transition_count; ++i) {
-        if (fire_vector[i]) {
-            transitions[i]->fire();
-        }
-    }
-
-    // Update each place with its new value
-    unsigned error_count = 0;
-    for (unsigned i = 0; i < place_count; ++i) {
-        error_count += places[i]->update();
-    }
-
-    if (error_count > 0) {
-        // Error occured, restore the PetriNet to before the update
-        for (unsigned i = 0; i < place_count; ++i) {
-            places[i]->restore();
-        }
+int PetriNet::fire(unsigned index) {
+    if (transitions[index]->enabled()) {
+        transitions[index]->fire();
+        return 0;
+    } else {
         return 1;
     }
 
+    //// Update each place with its new value
+    //unsigned error_count = 0;
+    //for (unsigned i = 0; i < place_count; ++i) {
+    //    error_count += places[i]->update();
+    //}
+
+    //if (error_count > 0) {
+    //    // Error occured, restore the PetriNet to before the update
+    //    for (unsigned i = 0; i < place_count; ++i) {
+    //        places[i]->restore();
+    //    }
+    //    return 1;
+    //}
+
     // No errors
-    return 0;
+    //return 0;
 }
 
 std::shared_ptr<PetriNetParser> const& PetriNet::get_parser() const {

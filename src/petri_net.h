@@ -26,9 +26,10 @@ public:
 
     PetriNetState get_state() const;
 
-    /* If the fire_vector is legal update the state of the PetriNet and return 0,
-     * if it is not legal return 1 (the net is unchanged) */
-    int fire(std::vector<bool> const &fire_vector);
+    /* If the index corresponds to an enabled transition, update the state of
+     * the PetriNet and return 0, if it is not return 1 (the net is
+     * unchanged) */
+    int fire(unsigned index);
 
     unsigned get_place_count() const;
     unsigned get_transition_count() const;

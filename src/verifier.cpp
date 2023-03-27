@@ -37,13 +37,11 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
     check_reachability(petri_net);
 
     unsigned const transition_count = petri_net.get_transition_count();
-    vector<bool> fire_vector(transition_count, false);
-    fire_vector[0] = true;
     unsigned live_transitions = 0;
     PetriNet active_net{petri_net};
     bool last_fire_was_illegal = false;
     bool first_itteration = true;
-    while (fire_vector != vector<bool>(transition_count, false)) {
+    for (unsigned fire_index=0; fire_index < transition_count; ++fire_index) {
         if (last_fire_was_illegal || first_itteration) {
             // We can keep the old value of active_net
             first_itteration = false;
@@ -52,7 +50,7 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
             active_net = petri_net;
         }
 
-        if (active_net.fire(fire_vector)) {
+        if (active_net.fire(fire_index)) {
             // Illegal fire
             last_fire_was_illegal = true;
         } else {
@@ -68,16 +66,6 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
                     });
             } else {
                 // Known state
-            }
-        }
-
-        // Increment the fire vector
-        for (unsigned i = 0; i < transition_count; ++i) {
-            if (fire_vector[i] == false) {
-                fire_vector[i] = true;
-                break;
-            } else {
-                fire_vector[i] = false;
             }
         }
     }
