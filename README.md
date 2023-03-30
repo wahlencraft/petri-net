@@ -26,8 +26,16 @@ memory. By minimizing the constructor calls I was able to greatly decrease the
 execution time. This is best seen in commit `fc589de` after which one test ran
 3.7 times faster!
 
-Finally I built a thread-pool and could execute multiple verification paths
-simultaneously. This resulted in a speedup of 11.8 times on my machine.
-Using multiple threads works better for larger problems, small nets actually
-gets slower.
+Then I built a thread-pool and could execute multiple verification paths
+simultaneously. This resulted in a speedup of 11.8 times on my machine (14
+hetrogeneous cores) Using multiple threads works better for larger problems,
+small nets actually gets slower.
+
+Finally I realized that it is equivalent to fire one enabled transition at a
+time and to check for possible patterns to fire simultaneously. This makes
+finding the next possible states O(n) rather than O(n^2). This resulted in an
+enormous speed increase for very large nets. This did however ruin some of the
+benefits of multithreading as the program is no longer compute limited. In my
+final benchmark (`very_large_net.txt`) a speedup of roughly 3x can be observed
+when using many cores compared to one.
 
