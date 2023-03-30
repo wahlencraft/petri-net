@@ -9,6 +9,9 @@ int main() {
 
     cout << "Main" << endl;
 
+    // Make a really large net
+    // Before commit f839909e263a7b910de321999c73afd638828538 this would have
+    // taken practically forever to verify
     PetriNet bound_net{
         "G0     -> T0  -> G1",
         "G1, B1 -> T1  -> G0, B0",
@@ -27,7 +30,25 @@ int main() {
         "W13    -> TW13 -> W23",
         "W14    -> TW14 -> W24",
 
-        "W20, W21, W22, W23, W24 -> T4 -> C1"
+        "W20    -> TW20 -> W30",
+        "W21    -> TW21 -> W31",
+        "W22    -> TW22 -> W32",
+        "W23    -> TW23 -> W33",
+        "W24    -> TW24 -> W34",
+
+        "W30    -> TW30 -> W40",
+        "W31    -> TW31 -> W41",
+        "W32    -> TW32 -> W42",
+        "W33    -> TW33 -> W43",
+        "W34    -> TW34 -> W44",
+
+        "W40    -> TW40 -> W50",
+        "W41    -> TW41 -> W51",
+        "W42    -> TW42 -> W52",
+        "W43    -> TW43 -> W53",
+        "W44    -> TW44 -> W54",
+
+        "W50, W51, W52, W53, W54 -> T4 -> C1"
     };
     bound_net.update_state("G0", 1);
     bound_net.update_state("B0", 5);

@@ -494,156 +494,68 @@ TEST_CASE("Verifier") {
         CHECK_THROWS_AS(verifier.verify(), ReachabilityException);
     }
 
-    BENCHMARK_ADVANCED("6 Places, 4 Transitions")(Catch::Benchmark::Chronometer meter) {
-        PetriNet bound_net{
-            "G0     -> T0  -> G1",
-            "G1, B1 -> T1  -> G0, B0",
-            "B0, C1 -> T2  -> B1, C0",
-            "C0     -> T3  -> C1"
-        };
-        bound_net.update_state("G0", 1);
-        bound_net.update_state("B1", 5);
-        bound_net.update_state("C1", 1);
+    PetriNet large_net{
+        "G0     -> T0  -> G1",
+        "G1, B1 -> T1  -> G0, B0",
+        "B0, C1 -> T2  -> B1, C0",
+        "C0     -> T3  -> W00, W01, W02, W03, W04",
 
-        Verifier verifier{bound_net};
+        "W00    -> TW00 -> W10",
+        "W01    -> TW01 -> W11",
+        "W02    -> TW02 -> W12",
+        "W03    -> TW03 -> W13",
+        "W04    -> TW04 -> W14",
+
+        "W10    -> TW10 -> W20",
+        "W11    -> TW11 -> W21",
+        "W12    -> TW12 -> W22",
+        "W13    -> TW13 -> W23",
+        "W14    -> TW14 -> W24",
+
+        "W20    -> TW20 -> W30",
+        "W21    -> TW21 -> W31",
+        "W22    -> TW22 -> W32",
+        "W23    -> TW23 -> W33",
+        "W24    -> TW24 -> W34",
+
+        "W30, W31, W32, W33, W34 -> T4 -> C1"
+    };
+    large_net.update_state("G0", 1);
+    large_net.update_state("B1", 5);
+    large_net.update_state("C1", 1);
+
+    BENCHMARK_ADVANCED("Very large net (1 thread)")(Catch::Benchmark::Chronometer meter) {
+        Verifier verifier{large_net, 1};
         verifier.constraints.require_live();
         meter.measure([&verifier] { verifier.verify(); });
     };
 
-    BENCHMARK_ADVANCED("11 Places, 5 Transitions")(Catch::Benchmark::Chronometer meter) {
-        PetriNet bound_net{
-            "G0     -> T0  -> G1",
-            "G1, B1 -> T1  -> G0, B0",
-            "B0, C1 -> T2  -> B1, C0",
-            "C0     -> T3  -> W00, W01, W02, W03, W04",
-
-            "W00, W01, W02, W03, W04 -> T4 -> C1"
-        };
-        bound_net.update_state("G0", 1);
-        bound_net.update_state("B1", 5);
-        bound_net.update_state("C1", 1);
-
-        Verifier verifier{bound_net};
+    BENCHMARK_ADVANCED("Very large net (2 threads)")(Catch::Benchmark::Chronometer meter) {
+        Verifier verifier{large_net, 2};
         verifier.constraints.require_live();
         meter.measure([&verifier] { verifier.verify(); });
     };
 
-    BENCHMARK_ADVANCED("16 Places, 10 Transitions (1 thread)")(Catch::Benchmark::Chronometer meter) {
-        PetriNet bound_net{
-            "G0     -> T0  -> G1",
-            "G1, B1 -> T1  -> G0, B0",
-            "B0, C1 -> T2  -> B1, C0",
-            "C0     -> T3  -> W00, W01, W02, W03, W04",
-
-            "W00    -> TW0 -> W10",
-            "W01    -> TW1 -> W11",
-            "W02    -> TW2 -> W12",
-            "W03    -> TW3 -> W13",
-            "W04    -> TW4 -> W14",
-
-            "W10, W11, W12, W13, W14 -> T4 -> C1"
-        };
-        bound_net.update_state("G0", 1);
-        bound_net.update_state("B1", 5);
-        bound_net.update_state("C1", 1);
-
-        Verifier verifier{bound_net, 1};
+    BENCHMARK_ADVANCED("Very large net (4 threads)")(Catch::Benchmark::Chronometer meter) {
+        Verifier verifier{large_net, 4};
         verifier.constraints.require_live();
         meter.measure([&verifier] { verifier.verify(); });
     };
 
-    BENCHMARK_ADVANCED("16 Places, 10 Transitions (4 threads)")(Catch::Benchmark::Chronometer meter) {
-        PetriNet bound_net{
-            "G0     -> T0  -> G1",
-            "G1, B1 -> T1  -> G0, B0",
-            "B0, C1 -> T2  -> B1, C0",
-            "C0     -> T3  -> W00, W01, W02, W03, W04",
-
-            "W00    -> TW0 -> W10",
-            "W01    -> TW1 -> W11",
-            "W02    -> TW2 -> W12",
-            "W03    -> TW3 -> W13",
-            "W04    -> TW4 -> W14",
-
-            "W10, W11, W12, W13, W14 -> T4 -> C1"
-        };
-        bound_net.update_state("G0", 1);
-        bound_net.update_state("B1", 5);
-        bound_net.update_state("C1", 1);
-
-        Verifier verifier{bound_net, 4};
+    BENCHMARK_ADVANCED("Very large net (8 threads)")(Catch::Benchmark::Chronometer meter) {
+        Verifier verifier{large_net, 8};
         verifier.constraints.require_live();
         meter.measure([&verifier] { verifier.verify(); });
     };
 
-    BENCHMARK_ADVANCED("16 Places, 10 Transitions (8 threads)")(Catch::Benchmark::Chronometer meter) {
-        PetriNet bound_net{
-            "G0     -> T0  -> G1",
-            "G1, B1 -> T1  -> G0, B0",
-            "B0, C1 -> T2  -> B1, C0",
-            "C0     -> T3  -> W00, W01, W02, W03, W04",
-
-            "W00    -> TW0 -> W10",
-            "W01    -> TW1 -> W11",
-            "W02    -> TW2 -> W12",
-            "W03    -> TW3 -> W13",
-            "W04    -> TW4 -> W14",
-
-            "W10, W11, W12, W13, W14 -> T4 -> C1"
-        };
-        bound_net.update_state("G0", 1);
-        bound_net.update_state("B1", 5);
-        bound_net.update_state("C1", 1);
-
-        Verifier verifier{bound_net, 8};
+    BENCHMARK_ADVANCED("Very large net (16 threads)")(Catch::Benchmark::Chronometer meter) {
+        Verifier verifier{large_net, 16};
         verifier.constraints.require_live();
         meter.measure([&verifier] { verifier.verify(); });
     };
 
-    BENCHMARK_ADVANCED("16 Places, 10 Transitions (16 threads)")(Catch::Benchmark::Chronometer meter) {
-        PetriNet bound_net{
-            "G0     -> T0  -> G1",
-            "G1, B1 -> T1  -> G0, B0",
-            "B0, C1 -> T2  -> B1, C0",
-            "C0     -> T3  -> W00, W01, W02, W03, W04",
-
-            "W00    -> TW0 -> W10",
-            "W01    -> TW1 -> W11",
-            "W02    -> TW2 -> W12",
-            "W03    -> TW3 -> W13",
-            "W04    -> TW4 -> W14",
-
-            "W10, W11, W12, W13, W14 -> T4 -> C1"
-        };
-        bound_net.update_state("G0", 1);
-        bound_net.update_state("B1", 5);
-        bound_net.update_state("C1", 1);
-
-        Verifier verifier{bound_net, 16};
-        verifier.constraints.require_live();
-        meter.measure([&verifier] { verifier.verify(); });
-    };
-
-    BENCHMARK_ADVANCED("16 Places, 10 Transitions")(Catch::Benchmark::Chronometer meter) {
-        PetriNet bound_net{
-            "G0     -> T0  -> G1",
-            "G1, B1 -> T1  -> G0, B0",
-            "B0, C1 -> T2  -> B1, C0",
-            "C0     -> T3  -> W00, W01, W02, W03, W04",
-
-            "W00    -> TW0 -> W10",
-            "W01    -> TW1 -> W11",
-            "W02    -> TW2 -> W12",
-            "W03    -> TW3 -> W13",
-            "W04    -> TW4 -> W14",
-
-            "W10, W11, W12, W13, W14 -> T4 -> C1"
-        };
-        bound_net.update_state("G0", 1);
-        bound_net.update_state("B1", 5);
-        bound_net.update_state("C1", 1);
-
-        Verifier verifier{bound_net};
+    BENCHMARK_ADVANCED("Very large net (unlimited threads)")(Catch::Benchmark::Chronometer meter) {
+        Verifier verifier{large_net};
         verifier.constraints.require_live();
         meter.measure([&verifier] { verifier.verify(); });
     };
