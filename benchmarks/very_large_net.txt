@@ -1,0 +1,28 @@
+These benchmarks was recorded on a i5-13600K with the fastest core overclocked
+to 5.5 GHz and 3600 MT/s CL 17 memory.
+
+3c834cd
+-------------------------------------------------------------------------------
+Very large net (1 thread)                      100             1      31.649 s
+                                        311.048 ms    310.663 ms    311.724 ms
+                                        2.52925 ms    1.56283 ms    4.04405 ms
+
+Very large net (2 threads)                     100             1      23.204 s
+                                        234.437 ms    234.102 ms    234.805 ms
+                                        1.80021 ms    1.51152 ms    2.19138 ms
+
+Very large net (4 threads)                     100             1     14.2177 s
+                                        141.592 ms    141.261 ms    141.941 ms
+                                        1.73607 ms    1.53087 ms    1.99769 ms
+
+Very large net (8 threads)                     100             1     10.0481 s
+                                        99.4644 ms    99.2384 ms    99.7085 ms
+                                        1.19231 ms    1.02998 ms    1.40102 ms
+
+Very large net (16 threads)                    100             1     9.24003 s
+                                        92.4739 ms    92.2971 ms      92.65 ms
+                                         900.78 us    802.285 us    1.02247 ms
+
+Very large net (unlimited threads)             100             1     10.0353 s
+                                        99.0012 ms    98.8042 ms     99.205 ms
+                                        1.02177 ms    905.389 us    1.17084 ms
