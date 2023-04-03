@@ -1,0 +1,51 @@
+e139de6
+-------------------------------------------------------------------------------
+Very large net (1 thread)                      100             1     1.93296 m
+                                         1.19569 s     1.16948 s     1.23083 s
+                                        153.614 ms    119.934 ms     194.01 ms
+
+Very large net (2 threads)                     100             1     1.27614 m
+                                        798.103 ms    791.408 ms    805.964 ms
+                                        36.9083 ms    31.9264 ms    42.8099 ms
+
+Very large net (4 threads)                     100             1     53.7253 s
+                                        543.198 ms    539.696 ms    547.101 ms
+                                        18.8148 ms    16.4331 ms    22.0919 ms
+
+Very large net (8 threads)                     100             1     42.3705 s
+                                        476.023 ms    469.583 ms    482.267 ms
+                                        32.4113 ms    29.7018 ms    35.5729 ms
+
+Very large net (16 threads)                    100             1     43.2427 s
+                                        479.026 ms    474.245 ms    483.263 ms
+                                        22.7644 ms    20.0332 ms    25.4724 ms
+
+Very large net (unlimited threads)             100             1     41.6569 s
+                                        479.345 ms    474.523 ms    483.461 ms
+                                        22.6813 ms    19.3572 ms     26.517 ms
+
+6147c69 Check if threadpool full
+-------------------------------------------------------------------------------
+Very large net (1 thread)                      100             1     1.15788 m
+                                         668.82 ms     666.63 ms     671.65 ms
+                                        12.5961 ms    10.2533 ms    16.1761 ms
+
+Very large net (2 threads)                     100             1      38.634 s
+                                        403.989 ms    400.382 ms    408.026 ms
+                                        19.5027 ms    16.2555 ms    24.2392 ms
+
+Very large net (4 threads)                     100             1      26.021 s
+                                        222.963 ms    219.094 ms    227.239 ms
+                                        20.8158 ms    18.3072 ms    23.9887 ms
+
+Very large net (8 threads)                     100             1      17.669 s
+                                        218.283 ms    213.129 ms    222.965 ms
+                                        25.0978 ms    21.9626 ms    28.3616 ms
+
+Very large net (16 threads)                    100             1     18.1534 s
+                                        221.747 ms    218.361 ms    224.771 ms
+                                        16.3311 ms    13.6159 ms    19.7404 ms
+
+Very large net (unlimited threads)             100             1     17.3448 s
+                                        220.429 ms    216.567 ms     223.68 ms
+                                        18.0403 ms    14.6224 ms    21.9755 ms
