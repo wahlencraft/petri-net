@@ -22,10 +22,11 @@ public:
 
     void enqueue(std::function<void()> job);
     void wait_for_jobs_to_finish();
+    bool full() const;
 
 private:
     bool stop = false;
-    std::atomic_int running_jobs{0};
+    std::atomic<unsigned> running_jobs{0};
     std::vector<std::thread> workers{};
     std::queue<std::function<void()>> tasks{};
     std::mutex mtx{};

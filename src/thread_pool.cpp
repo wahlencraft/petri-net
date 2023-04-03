@@ -72,3 +72,7 @@ void ThreadPool::wait_for_jobs_to_finish() {
     } while (running_jobs);
 }
 
+bool ThreadPool::full() const {
+    return running_jobs >= workers.size();
+}
+

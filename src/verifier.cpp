@@ -60,10 +60,15 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
             PetriNetState const &state = active_net.get_state();
             if (!reached_state(state)) {
                 // This is a new state
-                if (!abort)
-                    thread_pool.enqueue( [this, active_net, current_depth]() {
+                if (!abort) {
+                    if (thread_pool.full()) {
                         verify(active_net, current_depth + 1);
-                    });
+                    } else {
+                        thread_pool.enqueue( [this, active_net, current_depth]() {
+                            verify(active_net, current_depth + 1);
+                        });
+                    }
+                }
             } else {
                 // Known state
             }
