@@ -7,7 +7,7 @@
 using namespace std;
 
 Verifier::Verifier(PetriNet const &petri_net, unsigned max_threads):
-    constraints{petri_net.get_parser()}, initial_net{petri_net}, thread_pool{max_threads} {}
+    constraints{petri_net.get_parser()}, initial_net{petri_net} {}
 
 Verifier::~Verifier() {}
 
@@ -16,7 +16,6 @@ void Verifier::verify() {
     abort = false;
     token_max = initial_net.get_state().tokens;
     verify(initial_net, 0);
-    thread_pool.wait_for_jobs_to_finish();
     if (abort) {
         rethrow_exception(exception);
     }
@@ -61,13 +60,7 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
             if (!reached_state(state)) {
                 // This is a new state
                 if (!abort) {
-                    if (thread_pool.full()) {
-                        verify(active_net, current_depth + 1);
-                    } else {
-                        thread_pool.enqueue( [this, active_net, current_depth]() {
-                            verify(active_net, current_depth + 1);
-                        });
-                    }
+                    verify(active_net, current_depth + 1);
                 }
             } else {
                 // Known state
@@ -80,7 +73,6 @@ void Verifier::verify(PetriNet const &petri_net, unsigned current_depth) {
 }
 
 void Verifier::check_boundness(PetriNet const &net) {
-    std::unique_lock lock(mtx);
     PetriNetState const &current_state = net.get_state();
     bool constraints_satisfied = true;
     for (unsigned i = 0; i < initial_net.get_place_count(); ++i) {
@@ -115,7 +107,6 @@ void Verifier::check_boundness(PetriNet const &net) {
 void Verifier::check_reachability(PetriNet const &net) {
     if (constraints.is_illegal(net.get_state())) {
         abort = true;
-        std::unique_lock lock(mtx);
         stringstream ss;
         for (auto token : net.get_state().tokens)
             ss << token << " ";
@@ -129,7 +120,6 @@ void Verifier::check_liveness(PetriNet const &petri_net, unsigned live_transitio
     if (live_transitions == 0) {
         if (constraints.require_live()) {
             abort = true;
-            std::unique_lock lock(mtx);
             exception = make_exception_ptr(
                     LivenessException{
                         "PetriNet not live at depth " + to_string(current_depth) +
@@ -150,7 +140,6 @@ string Verifier::get_max_bounds_as_string() const {
 }
 
 bool Verifier::reached_state(PetriNetState const &state) {
-    std::unique_lock lock(mtx);
     if (previous_states.count(state) > 0) {
         return true;
     } else {

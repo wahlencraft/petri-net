@@ -11,7 +11,6 @@
 #include "petri_net.h"
 #include "verification_exceptions.h"
 #include "constraints.h"
-#include "thread_pool.h"
 
 class Verifier {
 public:
@@ -41,11 +40,8 @@ private:
     PetriNet const initial_net;
     std::vector<unsigned> token_max{};
 
-    ThreadPool thread_pool;
-    std::mutex mtx{};
-    std::condition_variable cv{};
 
-    std::atomic<bool> abort = false;
+    bool abort = false;
     std::exception_ptr exception = nullptr;
 };
 
