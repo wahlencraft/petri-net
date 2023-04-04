@@ -49,3 +49,29 @@ Very large net (16 threads)                    100             1     18.1534 s
 Very large net (unlimited threads)             100             1     17.3448 s
                                         220.429 ms    216.567 ms     223.68 ms
                                         18.0403 ms    14.6224 ms    21.9755 ms
+
+7759739 Test: Remove all multithreading
+-------------------------------------------------------------------------------
+Very large net (1 thread)                      100             1     37.1828 s
+                                        429.416 ms     426.14 ms    432.236 ms
+                                        15.5171 ms    11.6669 ms    20.9064 ms
+
+Very large net (2 threads)                     100             1     43.0072 s
+                                         438.09 ms    432.591 ms    443.975 ms
+                                        28.8819 ms    23.8939 ms    35.8316 ms
+
+Very large net (4 threads)                     100             1       46.58 s
+                                        442.174 ms    438.724 ms    447.736 ms
+                                        21.8912 ms    15.5376 ms    38.3594 ms
+
+Very large net (8 threads)                     100             1     42.2514 s
+                                        433.567 ms    430.818 ms     436.47 ms
+                                        14.2968 ms    11.3033 ms    19.4722 ms
+
+Very large net (16 threads)                    100             1     44.7934 s
+                                        424.871 ms    420.338 ms    428.534 ms
+                                        20.6876 ms    16.9418 ms    24.7744 ms
+
+Very large net (unlimited threads)             100             1     41.6578 s
+                                        428.746 ms    423.884 ms    433.173 ms
+                                        23.5161 ms     19.328 ms     28.258 ms
