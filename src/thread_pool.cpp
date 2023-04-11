@@ -11,8 +11,8 @@ string const END = "\033[0m";
 atomic_int job_counter = 0;
 
 ThreadPool::ThreadPool(unsigned threads) {
-    if (threads == 0 || threads > std::thread::hardware_concurrency())
-        threads = std::thread::hardware_concurrency();
+    if (threads == 0 || threads > std::thread::hardware_concurrency() - 1)
+        threads = std::thread::hardware_concurrency() - 1;
 
     for (unsigned i = 0; i < threads; ++i) {
         std::thread worker([this]() {
@@ -70,5 +70,9 @@ void ThreadPool::wait_for_jobs_to_finish() {
         std::unique_lock lock(mtx);
         cv.wait(lock, [this]() { return tasks.empty(); });
     } while (running_jobs);
+}
+
+bool ThreadPool::full() const {
+    return running_jobs >= workers.size();
 }
 

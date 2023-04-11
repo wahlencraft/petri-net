@@ -1,0 +1,108 @@
+These tests were run un my laptop. A hp probook 440 G6 with i5-8265U (4 cores 8 threads).
+The boost clock of this chip is very inconsistent and the benchmarks result
+sometimes varies from run to run.
+
+e139de6
+-------------------------------------------------------------------------------
+Very large net (1 thread)                      100             1     1.93296 m
+                                         1.19569 s     1.16948 s     1.23083 s
+                                        153.614 ms    119.934 ms     194.01 ms
+
+Very large net (2 threads)                     100             1     1.27614 m
+                                        798.103 ms    791.408 ms    805.964 ms
+                                        36.9083 ms    31.9264 ms    42.8099 ms
+
+Very large net (4 threads)                     100             1     53.7253 s
+                                        543.198 ms    539.696 ms    547.101 ms
+                                        18.8148 ms    16.4331 ms    22.0919 ms
+
+Very large net (8 threads)                     100             1     42.3705 s
+                                        476.023 ms    469.583 ms    482.267 ms
+                                        32.4113 ms    29.7018 ms    35.5729 ms
+
+Very large net (16 threads)                    100             1     43.2427 s
+                                        479.026 ms    474.245 ms    483.263 ms
+                                        22.7644 ms    20.0332 ms    25.4724 ms
+
+Very large net (unlimited threads)             100             1     41.6569 s
+                                        479.345 ms    474.523 ms    483.461 ms
+                                        22.6813 ms    19.3572 ms     26.517 ms
+
+6147c69 Check if threadpool full
+-------------------------------------------------------------------------------
+Very large net (1 thread)                      100             1     1.15788 m
+                                         668.82 ms     666.63 ms     671.65 ms
+                                        12.5961 ms    10.2533 ms    16.1761 ms
+
+Very large net (2 threads)                     100             1      38.634 s
+                                        403.989 ms    400.382 ms    408.026 ms
+                                        19.5027 ms    16.2555 ms    24.2392 ms
+
+Very large net (4 threads)                     100             1      26.021 s
+                                        222.963 ms    219.094 ms    227.239 ms
+                                        20.8158 ms    18.3072 ms    23.9887 ms
+
+Very large net (8 threads)                     100             1      17.669 s
+                                        218.283 ms    213.129 ms    222.965 ms
+                                        25.0978 ms    21.9626 ms    28.3616 ms
+
+Very large net (16 threads)                    100             1     18.1534 s
+                                        221.747 ms    218.361 ms    224.771 ms
+                                        16.3311 ms    13.6159 ms    19.7404 ms
+
+Very large net (unlimited threads)             100             1     17.3448 s
+                                        220.429 ms    216.567 ms     223.68 ms
+                                        18.0403 ms    14.6224 ms    21.9755 ms
+
+7759739 Test: Remove all multithreading
+-------------------------------------------------------------------------------
+Very large net (1 thread)                      100             1     37.1828 s
+                                        429.416 ms     426.14 ms    432.236 ms
+                                        15.5171 ms    11.6669 ms    20.9064 ms
+
+Very large net (2 threads)                     100             1     43.0072 s
+                                         438.09 ms    432.591 ms    443.975 ms
+                                        28.8819 ms    23.8939 ms    35.8316 ms
+
+Very large net (4 threads)                     100             1       46.58 s
+                                        442.174 ms    438.724 ms    447.736 ms
+                                        21.8912 ms    15.5376 ms    38.3594 ms
+
+Very large net (8 threads)                     100             1     42.2514 s
+                                        433.567 ms    430.818 ms     436.47 ms
+                                        14.2968 ms    11.3033 ms    19.4722 ms
+
+Very large net (16 threads)                    100             1     44.7934 s
+                                        424.871 ms    420.338 ms    428.534 ms
+                                        20.6876 ms    16.9418 ms    24.7744 ms
+
+Very large net (unlimited threads)             100             1     41.6578 s
+                                        428.746 ms    423.884 ms    433.173 ms
+                                        23.5161 ms     19.328 ms     28.258 ms
+
+
+6e6e79e Thread pool size is system threads - 1
+-------------------------------------------------------------------------------
+Very large net (1 thread)                      100             1     1.14957 m
+                                        642.989 ms    639.951 ms    654.594 ms
+                                        26.7424 ms    6.20517 ms     61.932 ms
+
+Very large net (2 threads)                     100             1      39.991 s
+                                        387.812 ms    384.868 ms    390.788 ms
+                                        15.0401 ms    13.0873 ms    17.8498 ms
+
+Very large net (4 threads)                     100             1     19.0831 s
+                                        214.367 ms    210.571 ms    218.531 ms
+                                        20.3032 ms     18.202 ms    23.0945 ms
+
+Very large net (8 threads)                     100             1     17.4791 s
+                                        212.956 ms    208.137 ms    217.572 ms
+                                        23.9548 ms    21.6775 ms    26.4356 ms
+
+Very large net (16 threads)                    100             1     17.4517 s
+                                        212.021 ms    208.691 ms    215.073 ms
+                                        16.3471 ms    13.7542 ms    19.5057 ms
+
+Very large net (unlimited threads)             100             1     17.3414 s
+                                        205.963 ms    202.682 ms    208.841 ms
+                                        15.7117 ms    13.1483 ms    18.5485 ms
